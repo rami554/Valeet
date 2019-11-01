@@ -1,10 +1,10 @@
 -- Created by Vertabelo (http://vertabelo.com)
--- Last modification date: 2019-10-25 01:58:08.581
+-- Last modification date: 2019-11-01 21:38:44.258
 
 -- tables
 -- Table: val_billing
 CREATE TABLE val_billing (
-    billing_id int NOT NULL,
+    billing_id int NOT NULL AUTO_INCREMENT,
     booking_id int NOT NULL,
     name varchar(50) NOT NULL,
     nit bigint NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE val_billing (
 
 -- Table: val_booking
 CREATE TABLE val_booking (
-    booking_id int NOT NULL,
+    booking_id int NOT NULL AUTO_INCREMENT,
     vehicle_id int NOT NULL,
     garage_id int NOT NULL,
     tariff_id int NOT NULL,
@@ -32,7 +32,7 @@ CREATE TABLE val_booking (
 
 -- Table: val_garage
 CREATE TABLE val_garage (
-    garage_id int NOT NULL,
+    garage_id int NOT NULL AUTO_INCREMENT,
     person_id int NOT NULL,
     name varchar(50) NOT NULL,
     lat double(10,6) NOT NULL,
@@ -46,7 +46,7 @@ CREATE TABLE val_garage (
 
 -- Table: val_person
 CREATE TABLE val_person (
-    person_id int NOT NULL,
+    person_id int NOT NULL AUTO_INCREMENT,
     first_name varchar(50) NOT NULL,
     first_last_name varchar(50) NULL,
     second_last_name varchar(50) NULL,
@@ -60,7 +60,7 @@ CREATE TABLE val_person (
 
 -- Table: val_tariff
 CREATE TABLE val_tariff (
-    tariff_id int NOT NULL,
+    tariff_id int NOT NULL AUTO_INCREMENT,
     description varchar(30) NOT NULL,
     rate numeric(10,2) NOT NULL,
     status int NOT NULL,
@@ -69,7 +69,7 @@ CREATE TABLE val_tariff (
 
 -- Table: val_vehicle
 CREATE TABLE val_vehicle (
-    vehicle_id int NOT NULL,
+    vehicle_id int NOT NULL AUTO_INCREMENT,
     person_id int NOT NULL,
     license_plate varchar(10) NOT NULL,
     status int NOT NULL,
