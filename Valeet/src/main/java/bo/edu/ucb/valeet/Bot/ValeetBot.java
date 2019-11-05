@@ -1,12 +1,16 @@
 package bo.edu.ucb.valeet.Bot;
 
+import bo.edu.ucb.valeet.domain.ValPerson;
+import bo.edu.ucb.valeet.repository.PersonRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class ValeetBot extends TelegramLongPollingBot {
-
+    @Autowired
+    private PersonRepository personRepository;
     public void onUpdateReceived(Update update) {
         String aux,usser,pass,email,placa,garage, nit,zona,espacios,direccion,name,lastname,secondlastname;
 
@@ -19,7 +23,7 @@ public class ValeetBot extends TelegramLongPollingBot {
         String command = update.getMessage ().getText ();
 
 
-        if (command.equals ( "/login" )) {
+        if (command.equals ( "/registrarme" )) {
             System.out.println ( "favor ingrese su email" );
             message.setText ( "favor ingrese su email" );
             email=update.getMessage ().getText ();
@@ -55,8 +59,15 @@ public class ValeetBot extends TelegramLongPollingBot {
                         nit= update.getMessage ().getText ();
                         System.out.println ( name+lastname+secondlastname+usser+email+pass+placa+nit+pass );
 
+                        ValPerson nueva = new ValPerson();
+                        nueva.setFirstName ( name );
+                        nueva.setEmail (    email );
+                        nueva.setFirstLastName ( lastname );
+                        nueva.setSecondLastName ( secondlastname );
+                        nueva.setPassword ( pass  );
+                        personRepository.save(nueva);
                     }
-                    if (command.equals ( "/garage" )) {
+                  if (command.equals ( "/garage" )) {
 
                         message.setText (  "Favor de ingresar tu nombre de usuario ");
                         usser = update.getMessage ().getText ();

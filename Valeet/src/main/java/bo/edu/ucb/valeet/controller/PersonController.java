@@ -2,6 +2,7 @@ package bo.edu.ucb.valeet.controller;
 
 import bo.edu.ucb.valeet.domain.ValPerson;
 import bo.edu.ucb.valeet.repository.PersonRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +12,7 @@ import java.util.List;
 @RequestMapping({"/person"})
 
 public class PersonController {
-
+    @Autowired
     private PersonRepository repository;
 
     PersonController(PersonRepository personRepository) {
@@ -22,6 +23,18 @@ public class PersonController {
     public List findAll(){
         return repository.findAll();
     }
+   /* public List findAll(){
+
+        ValPerson nueva = new ValPerson();
+        nueva.setFirstName ( "napo" );
+        nueva.setEmail (    "email" );
+        nueva.setFirstLastName ( "lastname" );
+        nueva.setSecondLastName ( "secondlastname" );
+        nueva.setPassword ( "pass"  );
+        repository.save(nueva);
+
+        return repository.findAll();
+    }*/
 
     @GetMapping(path = {"/{id}"})
     public ResponseEntity<ValPerson> findById(@PathVariable long id){
@@ -36,8 +49,7 @@ public class PersonController {
     }
 
     @PutMapping(value="/{id}")
-    public ResponseEntity<ValPerson> update(@PathVariable("id") long id,
-                                          @RequestBody ValPerson person){
+    public ResponseEntity<ValPerson> update(@PathVariable("id") long id, @RequestBody ValPerson person){
         return repository.findById(id)
                 .map(record -> {
                     record.setFirstName(person.getFirstName());
