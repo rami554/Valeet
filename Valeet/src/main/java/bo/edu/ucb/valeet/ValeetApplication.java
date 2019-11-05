@@ -16,17 +16,17 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 public class ValeetApplication {
 
 	public static void main(String[] args) {
+	    ApiContextInitializer.init();
 		SpringApplication.run(ValeetApplication.class, args);
 
+/*
 
-		ApiContextInitializer.init();
 		TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
 		try {
 			telegramBotsApi.registerBot(new ValeetBot());
 
 		} catch (TelegramApiException e) {
 			e.printStackTrace();
-		}
-	}
+		}	*/}
 
 }

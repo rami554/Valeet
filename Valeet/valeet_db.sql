@@ -50,7 +50,6 @@ CREATE TABLE `val_booking` (
   `booking_id` int(11) NOT NULL,
   `vehicle_id` int(11) NOT NULL,
   `garage_id` int(11) NOT NULL,
-  `tariff_id` int(11) NOT NULL,
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
   `start_time` time NOT NULL,
@@ -68,12 +67,15 @@ CREATE TABLE `val_garage` (
   `garage_id` int(11) NOT NULL,
   `person_id` int(11) NOT NULL,
   `name` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
+  `address` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
+  `zone` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
+  `rate` decimal(10,2) NOT NULL,
   `lat` double(10,6) NOT NULL,
   `long` double(10,6) NOT NULL,
   `total_spots` int(11) NOT NULL,
   `free_spots` int(11) NOT NULL,
   `occupied_spots` int(11) NOT NULL,
-  `status` int(11) NOT NULL
+  `status` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
@@ -88,23 +90,10 @@ CREATE TABLE `val_person` (
   `first_last_name` varchar(50) COLLATE utf8_spanish_ci DEFAULT NULL,
   `second_last_name` varchar(50) COLLATE utf8_spanish_ci DEFAULT NULL,
   `email` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
-  `password` varchar(30) COLLATE utf8_spanish_ci NOT NULL,
+  `telegram_id` int(30) NOT NULL,
   `personal_id` varchar(30) COLLATE utf8_spanish_ci NOT NULL,
-  `parking_admin` int(11) NOT NULL,
-  `status` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `val_tariff`
---
-
-CREATE TABLE `val_tariff` (
-  `tariff_id` int(11) NOT NULL,
-  `description` varchar(30) COLLATE utf8_spanish_ci NOT NULL,
-  `rate` decimal(10,2) NOT NULL,
-  `status` int(11) NOT NULL
+  `parking_admin` int(11) NOT NULL DEFAULT 1,
+  `status` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
@@ -137,7 +126,6 @@ ALTER TABLE `val_billing`
 ALTER TABLE `val_booking`
   ADD PRIMARY KEY (`booking_id`),
   ADD KEY `val_booking_val_garage` (`garage_id`),
-  ADD KEY `val_booking_val_tariff` (`tariff_id`),
   ADD KEY `val_booking_val_vehicle` (`vehicle_id`);
 
 --
@@ -152,12 +140,6 @@ ALTER TABLE `val_garage`
 --
 ALTER TABLE `val_person`
   ADD PRIMARY KEY (`person_id`);
-
---
--- Indices de la tabla `val_tariff`
---
-ALTER TABLE `val_tariff`
-  ADD PRIMARY KEY (`tariff_id`);
 
 --
 -- Indices de la tabla `val_vehicle`
@@ -194,11 +176,6 @@ ALTER TABLE `val_garage`
 ALTER TABLE `val_person`
   MODIFY `person_id` int(11) NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT de la tabla `val_tariff`
---
-ALTER TABLE `val_tariff`
-  MODIFY `tariff_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `val_vehicle`
@@ -221,7 +198,6 @@ ALTER TABLE `val_billing`
 --
 ALTER TABLE `val_booking`
   ADD CONSTRAINT `val_booking_val_garage` FOREIGN KEY (`garage_id`) REFERENCES `val_garage` (`garage_id`),
-  ADD CONSTRAINT `val_booking_val_tariff` FOREIGN KEY (`tariff_id`) REFERENCES `val_tariff` (`tariff_id`),
   ADD CONSTRAINT `val_booking_val_vehicle` FOREIGN KEY (`vehicle_id`) REFERENCES `val_vehicle` (`vehicle_id`);
 
 --

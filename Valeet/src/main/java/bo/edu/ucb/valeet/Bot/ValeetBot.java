@@ -1,16 +1,26 @@
 package bo.edu.ucb.valeet.Bot;
 
 import bo.edu.ucb.valeet.domain.ValPerson;
+import bo.edu.ucb.valeet.controller.PersonController;
 import bo.edu.ucb.valeet.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RestController;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
+@Component
 public class ValeetBot extends TelegramLongPollingBot {
     @Autowired
-    private PersonRepository personRepository;
+    PersonRepository repository;
+
+    /*@Autowired
+    public void setPersonRepository(PersonRepository repositoryp){
+        repository = repositoryp;
+    }*/
+
     public void onUpdateReceived(Update update) {
         String aux;
         int idpersonnal;
@@ -33,13 +43,24 @@ public class ValeetBot extends TelegramLongPollingBot {
         message.setText(update.getMessage().getText());   */
         String command = update.getMessage ().getText ();
 
-        if (command.equals ( "/start" )) {}
+        if (command.equals ( "/start" )) {
         name= update.getMessage ().getFrom ().getFirstName ();
         lastname =update.getMessage ().getFrom ().getLastName ();
         idpersonnal = update.getMessage ().getFrom ().getId ();
         String idp = Integer.toString(idpersonnal);
         System.out.println ( "hola"+idp+"--"+name+lastname+"como estas" );
         message.setText (  "hola"+idp+"--"+name+lastname+"como estas" );
+
+        ValPerson persona = new ValPerson();
+        persona.setPersonId(1);
+        persona.setFirstName(name);
+        persona.setFirstLastName(lastname);
+        persona.setEmail("abde@gmail.com");
+        persona.setTelegramId(idpersonnal);
+        persona.setPersonalId("785475LP");
+        persona.setParkingAdmin(1);
+        persona.setStatus(1);
+        repository.save(persona);
 //
        /* ValPerson nueva = new ValPerson();
         nueva.setFirstName ( name);
@@ -54,6 +75,7 @@ public class ValeetBot extends TelegramLongPollingBot {
        // personRepository.save(nueva);
         System.out.println ( "hola"+idp+"--"+name+lastname+"como estas" );
         message.setText (  "hola"+idp+"--"+name+lastname+"como estas" );
+        }
 
         if (command.equals ( "/registrarme" )) {
             System.out.println ( "favor ingrese su email" );

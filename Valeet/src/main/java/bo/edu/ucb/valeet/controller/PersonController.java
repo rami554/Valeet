@@ -49,7 +49,7 @@ public class PersonController {
 
     @PostMapping
     public ValPerson create(@RequestBody ValPerson person){
-        return repository.save(person);
+                return repository.save(person);
     }
 
     @PutMapping(value="/{id}")
@@ -60,7 +60,7 @@ public class PersonController {
                     record.setFirstLastName(person.getFirstLastName());
                     record.setSecondLastName(person.getSecondLastName());
                     record.setEmail(person.getEmail());
-                    record.setPassword(person.getPassword());
+                    record.setTelegramId(person.getTelegramId());
                     record.setPersonalId(person.getPersonalId());
                     record.setParkingAdmin(person.getParkingAdmin());
                     record.setStatus(person.getStatus());

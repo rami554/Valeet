@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
         @NamedQuery(name = "ValPerson.findByFirstLastName", query = "SELECT v FROM ValPerson v WHERE v.firstLastName = :firstLastName"),
         @NamedQuery(name = "ValPerson.findBySecondLastName", query = "SELECT v FROM ValPerson v WHERE v.secondLastName = :secondLastName"),
         @NamedQuery(name = "ValPerson.findByEmail", query = "SELECT v FROM ValPerson v WHERE v.email = :email"),
-        @NamedQuery(name = "ValPerson.findByPassword", query = "SELECT v FROM ValPerson v WHERE v.password = :password"),
+        @NamedQuery(name = "ValPerson.findByTelegramId", query = "SELECT v FROM ValPerson v WHERE v.telegramId = :telegramId"),
         @NamedQuery(name = "ValPerson.findByPersonalId", query = "SELECT v FROM ValPerson v WHERE v.personalId = :personalId"),
         @NamedQuery(name = "ValPerson.findByParkingAdmin", query = "SELECT v FROM ValPerson v WHERE v.parkingAdmin = :parkingAdmin"),
         @NamedQuery(name = "ValPerson.findByStatus", query = "SELECT v FROM ValPerson v WHERE v.status = :status")})
@@ -48,9 +48,8 @@ public class ValPerson implements Serializable {
     private String email;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 30)
-    @Column(name = "password")
-    private String password;
+    @Column(name = "telegram_id")
+    private int telegramId;
     @Basic(optional = false)
     //@NotNull
     @Size(min = 1, max = 30)
@@ -76,11 +75,11 @@ public class ValPerson implements Serializable {
         this.personId = personId;
     }
 
-    public ValPerson(Integer personId, String firstName, String email, String password, String personalId, int parkingAdmin, int status) {
+    public ValPerson(Integer personId, String firstName, String email, int telegramId, String personalId, int parkingAdmin, int status) {
         this.personId = personId;
         this.firstName = firstName;
         this.email = email;
-        this.password = password;
+        this.telegramId = telegramId;
         this.personalId = personalId;
         this.parkingAdmin = parkingAdmin;
         this.status = status;
@@ -126,12 +125,12 @@ public class ValPerson implements Serializable {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public int getTelegramId() {
+        return telegramId;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setTelegramId(int telegramId) {
+        this.telegramId = telegramId;
     }
 
     public String getPersonalId() {
