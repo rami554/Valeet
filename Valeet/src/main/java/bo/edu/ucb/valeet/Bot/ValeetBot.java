@@ -12,16 +12,48 @@ public class ValeetBot extends TelegramLongPollingBot {
     @Autowired
     private PersonRepository personRepository;
     public void onUpdateReceived(Update update) {
-        String aux,usser,pass,email,placa,garage, nit,zona,espacios,direccion,name,lastname,secondlastname;
+        String aux;
+        int idpersonnal;
+        String usser;
+        String pass;
+        String email;
+        String placa;
+        String garage;
+        String nit;
+        String zona;
+        String espacios;
+        String direccion;
+        String name;
+        String lastname;
+        String secondlastname;
 
         SendMessage message = new SendMessage ();
        /* System.out.println(update.getMessage().getText());
 
-        message.setText(update.getMessage().getText());
-
-        */
+        message.setText(update.getMessage().getText());   */
         String command = update.getMessage ().getText ();
 
+        if (command.equals ( "/start" )) {}
+        name= update.getMessage ().getFrom ().getFirstName ();
+        lastname =update.getMessage ().getFrom ().getLastName ();
+        idpersonnal = update.getMessage ().getFrom ().getId ();
+        String idp = Integer.toString(idpersonnal);
+        System.out.println ( "hola"+idp+"--"+name+lastname+"como estas" );
+        message.setText (  "hola"+idp+"--"+name+lastname+"como estas" );
+//
+       /* ValPerson nueva = new ValPerson();
+        nueva.setFirstName ( name);
+        nueva.setPersonalId ( idp );
+        nueva.setEmail (    "email" );
+        nueva.setFirstLastName ( lastname );
+        nueva.setSecondLastName ( "secondlastname" );
+        nueva.setPassword ( "pass"  );*/
+        //repository.save(nueva);
+      // PersonController user =new PersonController ();
+        //user.create ( nueva );
+       // personRepository.save(nueva);
+        System.out.println ( "hola"+idp+"--"+name+lastname+"como estas" );
+        message.setText (  "hola"+idp+"--"+name+lastname+"como estas" );
 
         if (command.equals ( "/registrarme" )) {
             System.out.println ( "favor ingrese su email" );
@@ -58,14 +90,14 @@ public class ValeetBot extends TelegramLongPollingBot {
                         message.setText ( " favor ingrese su nit");
                         nit= update.getMessage ().getText ();
                         System.out.println ( name+lastname+secondlastname+usser+email+pass+placa+nit+pass );
-
+/*
                         ValPerson nueva = new ValPerson();
                         nueva.setFirstName ( name );
                         nueva.setEmail (    email );
                         nueva.setFirstLastName ( lastname );
                         nueva.setSecondLastName ( secondlastname );
                         nueva.setPassword ( pass  );
-                        personRepository.save(nueva);
+                        personRepository.save(nueva);*/
                     }
                   if (command.equals ( "/garage" )) {
 

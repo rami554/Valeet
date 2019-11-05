@@ -15,8 +15,12 @@ public class PersonController {
     @Autowired
     private PersonRepository repository;
 
-    PersonController(PersonRepository personRepository) {
+    public PersonController(PersonRepository personRepository) {
         this.repository = personRepository;
+    }
+
+    public PersonController() {
+
     }
 
     @GetMapping
