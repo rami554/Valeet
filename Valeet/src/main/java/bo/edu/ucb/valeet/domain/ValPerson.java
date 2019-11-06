@@ -3,6 +3,7 @@ package bo.edu.ucb.valeet.domain;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.*;
+import java.util.Optional;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 

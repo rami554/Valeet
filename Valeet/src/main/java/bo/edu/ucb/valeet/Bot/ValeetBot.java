@@ -10,20 +10,21 @@ import org.springframework.web.bind.annotation.RestController;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import java.util.List;
+
 @Component
 public class ValeetBot extends TelegramLongPollingBot {
+
     @Autowired
-    PersonRepository repository;
+    PersonController personController;
 
-    /*@Autowired
-    public void setPersonRepository(PersonRepository repositoryp){
-        repository = repositoryp;
-    }*/
-
+    @Override
     public void onUpdateReceived(Update update) {
         String aux;
-        int idpersonnal;
+        int idtelegram;
         String usser;
         String pass;
         String email;
@@ -46,21 +47,28 @@ public class ValeetBot extends TelegramLongPollingBot {
         if (command.equals ( "/start" )) {
         name= update.getMessage ().getFrom ().getFirstName ();
         lastname =update.getMessage ().getFrom ().getLastName ();
-        idpersonnal = update.getMessage ().getFrom ().getId ();
-        String idp = Integer.toString(idpersonnal);
-        System.out.println ( "hola"+idp+"--"+name+lastname+"como estas" );
-        message.setText (  "hola"+idp+"--"+name+lastname+"como estas" );
+        idtelegram = update.getMessage ().getFrom ().getId ();
 
+
+        if (personController.findByTelegramId(idtelegram).isEmpty())
+        {
         ValPerson persona = new ValPerson();
         persona.setPersonId(1);
         persona.setFirstName(name);
         persona.setFirstLastName(lastname);
         persona.setEmail("abde@gmail.com");
-        persona.setTelegramId(idpersonnal);
+        persona.setTelegramId(idtelegram);
         persona.setPersonalId("785475LP");
         persona.setParkingAdmin(1);
         persona.setStatus(1);
-        repository.save(persona);
+        personController.create(persona);
+        System.out.println ( "Usuario Creado" );
+        message.setText (  "Usuario creado" );
+        }
+        else
+        {   System.out.println ( "hola "+idtelegram+" "+name+" "+lastname+" como estas" );
+            message.setText (  "hola "+idtelegram+" "+name+" "+lastname+" como estas" );}
+
 //
        /* ValPerson nueva = new ValPerson();
         nueva.setFirstName ( name);
@@ -73,8 +81,8 @@ public class ValeetBot extends TelegramLongPollingBot {
       // PersonController user =new PersonController ();
         //user.create ( nueva );
        // personRepository.save(nueva);
-        System.out.println ( "hola"+idp+"--"+name+lastname+"como estas" );
-        message.setText (  "hola"+idp+"--"+name+lastname+"como estas" );
+       // System.out.println ( "hola"+idtelegram+"--"+name+lastname+"como estas" );
+        //message.setText (  "hola"+idtelegram+"--"+name+lastname+"como estas" );
         }
 
         if (command.equals ( "/registrarme" )) {

@@ -4,29 +4,31 @@ import bo.edu.ucb.valeet.domain.ValPerson;
 import bo.edu.ucb.valeet.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
 
 import java.util.List;
+import java.util.Optional;
 
-@RestController
-@RequestMapping({"/person"})
+@Component
 
 public class PersonController {
-    @Autowired
-    private PersonRepository repository;
 
-    public PersonController(PersonRepository personRepository) {
-        this.repository = personRepository;
+    PersonRepository repository;
+    @Autowired
+    public PersonController(PersonRepository repository) {
+
+        this.repository = repository;
     }
 
     public PersonController() {
 
     }
 
-    @GetMapping
-    public List findAll(){
-        return repository.findAll();
-    }
+   // public List findAll(){return repository.findAll();}
    /* public List findAll(){
 
         ValPerson nueva = new ValPerson();
@@ -40,18 +42,20 @@ public class PersonController {
         return repository.findAll();
     }*/
 
-    @GetMapping(path = {"/{id}"})
-    public ResponseEntity<ValPerson> findById(@PathVariable long id){
-        return repository.findById(id)
+       /* return repository.findById(id)
                 .map(record -> ResponseEntity.ok().body(record))
                 .orElse(ResponseEntity.notFound().build());
-    }
+    }*/
 
-    @PostMapping
-    public ValPerson create(@RequestBody ValPerson person){
+    public List findByTelegramId(int id) {
+
+    return repository.findByTelegramId(id);
+}
+
+    public ValPerson create(ValPerson person) {
                 return repository.save(person);
     }
-
+/*
     @PutMapping(value="/{id}")
     public ResponseEntity<ValPerson> update(@PathVariable("id") long id, @RequestBody ValPerson person){
         return repository.findById(id)
@@ -76,6 +80,6 @@ public class PersonController {
                     repository.deleteById(id);
                     return ResponseEntity.ok().build();
                 }).orElse(ResponseEntity.notFound().build());
-    }
+    }*/
 
 }
