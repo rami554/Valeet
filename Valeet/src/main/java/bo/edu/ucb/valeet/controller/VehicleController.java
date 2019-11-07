@@ -1,6 +1,8 @@
 package bo.edu.ucb.valeet.controller;
 
+import bo.edu.ucb.valeet.domain.ValVehicle;
 import bo.edu.ucb.valeet.domain.ValPerson;
+import bo.edu.ucb.valeet.repository.VehicleRepository;
 import bo.edu.ucb.valeet.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,26 +17,27 @@ import java.util.Optional;
 
 @Component
 
-public class PersonController {
+public class VehicleController {
 
-    PersonRepository repository;
+    VehicleRepository repository;
     @Autowired
-    public PersonController(PersonRepository repository) {
+    public VehicleController(VehicleRepository repository) {
 
         this.repository = repository;
     }
 
-    public PersonController() {
+    public VehicleController() {
 
     }
 
     public List findByTelegramId(int id) {
 
-    return repository.findByTelegramId(id);
-}
-
-    public ValPerson create(ValPerson person) {
-
-        return repository.save(person);
+        return repository.findByTelegramId(id);
     }
+
+    public  ValVehicle create(ValVehicle vehicle) {
+
+        return repository.save ( vehicle );
+    }
+
 }

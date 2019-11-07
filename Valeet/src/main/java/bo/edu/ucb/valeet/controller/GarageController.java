@@ -1,7 +1,9 @@
 package bo.edu.ucb.valeet.controller;
 
-import bo.edu.ucb.valeet.domain.ValPerson;
-import bo.edu.ucb.valeet.repository.PersonRepository;
+import bo.edu.ucb.valeet.domain.ValGarage;
+
+import bo.edu.ucb.valeet.repository.GarageRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -15,26 +17,26 @@ import java.util.Optional;
 
 @Component
 
-public class PersonController {
+public class GarageController {
 
-    PersonRepository repository;
+    GarageRepository repository1;
     @Autowired
-    public PersonController(PersonRepository repository) {
+    public GarageController(GarageRepository repository1) {
 
-        this.repository = repository;
+        this.repository1 = repository1;
     }
 
-    public PersonController() {
+    public GarageController() {
 
     }
 
     public List findByTelegramId(int id) {
 
-    return repository.findByTelegramId(id);
-}
-
-    public ValPerson create(ValPerson person) {
-
-        return repository.save(person);
+        return repository1.findByTelegramId(id);
     }
+
+    public ValGarage create(ValGarage garage) {
+        return repository1.save ( garage );
+    }
+
 }

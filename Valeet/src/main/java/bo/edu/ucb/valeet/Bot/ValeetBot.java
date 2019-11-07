@@ -1,8 +1,15 @@
 package bo.edu.ucb.valeet.Bot;
 
+
+import bo.edu.ucb.valeet.domain.ValGarage;
 import bo.edu.ucb.valeet.domain.ValPerson;
+import bo.edu.ucb.valeet.domain.ValVehicle;
 import bo.edu.ucb.valeet.controller.PersonController;
+import bo.edu.ucb.valeet.controller.GarageController;
+import bo.edu.ucb.valeet.controller.VehicleController;
 import bo.edu.ucb.valeet.repository.PersonRepository;
+import bo.edu.ucb.valeet.repository.GarageRepository;
+import bo.edu.ucb.valeet.repository.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -13,30 +20,36 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+
 import java.util.List;
+import java.util.logging.Logger;
 
 @Component
 public class ValeetBot extends TelegramLongPollingBot {
 
     @Autowired
     PersonController personController;
+    VehicleController vehicleController;
+    GarageController garageController;
 
     @Override
     public void onUpdateReceived(Update update) {
         String aux;
         int idtelegram;
+
         String usser;
         String pass;
         String email;
-        String placa;
+        String placa=null;
         String garage;
         String nit;
         String zona;
-        String espacios;
+        int espacios;
         String direccion;
         String name;
         String lastname;
-        String secondlastname;
+        String secondlastname = null;
+        String personalid;
 
         SendMessage message = new SendMessage ();
        /* System.out.println(update.getMessage().getText());
@@ -52,142 +65,101 @@ public class ValeetBot extends TelegramLongPollingBot {
 
         if (personController.findByTelegramId(idtelegram).isEmpty())
         {
-        ValPerson persona = new ValPerson();
-        persona.setPersonId(1);
-        persona.setFirstName(name);
-        persona.setFirstLastName(lastname);
-        persona.setEmail("abde@gmail.com");
-        persona.setTelegramId(idtelegram);
-        persona.setPersonalId("785475LP");
-        persona.setParkingAdmin(1);
-        persona.setStatus(1);
-        personController.create(persona);
-        System.out.println ( "Usuario Creado" );
-        message.setText (  "Usuario creado" );
+            ValPerson persona = new ValPerson();
+            persona.setTelegramId(idtelegram);
+            persona.setPersonId(1);
+            persona.setParkingAdmin(1);
+            persona.setStatus(1);
+            persona.setFirstName(name);
+            persona.setFirstLastName(lastname);
+            do {
+                    System.out.println ( "favor ingrese su  apellido materno" );
+                    message.setText ( "favor ingrese su  apellido materno" );
+                    secondlastname=update.getMessage ().getText ();
+                    persona.setSecondLastName ( update.getMessage ().getText () );
+            }while (secondlastname!=null);
+            do {
+                    System.out.println ( "favor ingrese su  apellido materno" );
+                    message.setText ( "favor ingrese su  apellido materno" );
+                    email=update.getMessage ().getText ();
+                    persona.setEmail(update.getMessage ().getText ());
+            }while (email!=null);
+            do {
+                    // Logger.info("Hello");
+                    System.out.println ( "favor ingrese su  apellido materno" );
+                    message.setText ( "favor ingrese su  apellido materno" );
+                    personalid=update.getMessage ().getText ();
+                    persona.setPersonalId ( update.getMessage ().getText () );
+            }while (personalid!=null);
+
+            personController.create(persona);
+            System.out.println ( "Usuario Creado" );
+            message.setText (  "Usuario creado" );
         }
         else
         {   System.out.println ( "hola "+idtelegram+" "+name+" "+lastname+" como estas" );
-            message.setText (  "hola "+idtelegram+" "+name+" "+lastname+" como estas" );}
+            message.setText (  "hola "+idtelegram+" "+name+" "+lastname+secondlastname+" como estas" );}
+           if (command.equals ( "/regitra_auto" )){
 
-//
-       /* ValPerson nueva = new ValPerson();
-        nueva.setFirstName ( name);
-        nueva.setPersonalId ( idp );
-        nueva.setEmail (    "email" );
-        nueva.setFirstLastName ( lastname );
-        nueva.setSecondLastName ( "secondlastname" );
-        nueva.setPassword ( "pass"  );*/
-        //repository.save(nueva);
-      // PersonController user =new PersonController ();
-        //user.create ( nueva );
-       // personRepository.save(nueva);
-       // System.out.println ( "hola"+idtelegram+"--"+name+lastname+"como estas" );
-        //message.setText (  "hola"+idtelegram+"--"+name+lastname+"como estas" );
-        }
+                ValVehicle auto=new ValVehicle (  );
 
-        if (command.equals ( "/registrarme" )) {
-            System.out.println ( "favor ingrese su email" );
-            message.setText ( "favor ingrese su email" );
-            email=update.getMessage ().getText ();
-            System.out.println ( "favor ingrese su password" );
-            message.setText ( "favor ingrese su password" );
-            pass=update.getMessage ().getText ();
-            if (email.equals ( email )&&pass.equals ( pass )){
-                System.out.println ( "que opcion desea" );
-                message.setText ( "que opcion desea" );
-              if (command.equals ( "/parqueo" )){
-                  System.out.println ( "Donde desa su parqueo?" );
-              }
-              if (command.equals ( "/registrarme" )) {
-                    System.out.println ( "Deseas registrar un auto o un parqueo?" );
-                    message.setText ( "Deseas registrar un auto o un parqueo? o desea eliminar" );
-                    if (command.equals ( "/auto" )) {
-                        System.out.println ( "Favor de ingresar tu nombre de usuario " );
-                        message.setText ( "Favor de ingresar tu nombre de usuario");
-                        usser=update.getMessage ().getText ();
-                        message.setText ( "Favor de ingresar tu nombre");
-                        name=update.getMessage ().getText ();
-                        message.setText ( "Favor de ingresar tu apellido paterno");
-                        lastname=update.getMessage ().getText ();
-                        message.setText ( "Favor de ingresar tu apellido materno");
-                        secondlastname=update.getMessage ().getText ();
-                        message.setText ( "Favor de ingresar tu correo electronico");
-                        email=update.getMessage ().getText ();
-                        message.setText ( "Favor de ingresar tu password");
-                        pass=update.getMessage ().getText ();
-                        message.setText ( "Favor ingrese su numero de placa");
-                        placa=update.getMessage ().getText ();
-                        message.setText ( " favor ingrese su nit");
-                        nit= update.getMessage ().getText ();
-                        System.out.println ( name+lastname+secondlastname+usser+email+pass+placa+nit+pass );
-/*
-                        ValPerson nueva = new ValPerson();
-                        nueva.setFirstName ( name );
-                        nueva.setEmail (    email );
-                        nueva.setFirstLastName ( lastname );
-                        nueva.setSecondLastName ( secondlastname );
-                        nueva.setPassword ( pass  );
-                        personRepository.save(nueva);*/
-                    }
-                  if (command.equals ( "/garage" )) {
+                do {
+                    System.out.println ( "favor ingrese su placa" );
+                    message.setText ( "favor ingrese su placa" );
+                    placa=update.getMessage ().getText ();
+                    auto.setLicensePlate ( update.getMessage ().getText () );
 
-                        message.setText (  "Favor de ingresar tu nombre de usuario ");
-                        usser = update.getMessage ().getText ();
-                        message.setText ( "Favor de ingresar tu nombre");
-                        name=update.getMessage ().getText ();
-                        message.setText ( "Favor de ingresar tu apellido paterno");
-                        lastname=update.getMessage ().getText ();
-                        message.setText ( "Favor de ingresar tu apellido materno");
-                        secondlastname=update.getMessage ().getText ();
-                        message.setText ( "Favor de ingresar tu correo electronico");
-                        email=update.getMessage ().getText ();
-                        message.setText ( "Favor de ingresar tu password");
-                        pass=update.getMessage ().getText ();
-                        message.setText ( "Favor ingresa tu zona ");
-                        zona = update.getMessage ().getText ();
-                        message.setText ( "Favor ingresa la cantidad de  espacios en tu garage");
-                        espacios = update.getMessage ().getText ();
-                        message .setText ( "Favor ingrese su nit ");
-                        nit = update.getMessage ().getText ();
-                        System.out.println ( name+lastname+secondlastname+usser+email+pass+zona+espacios+nit );
-                        System.out.println ( "Favor de ingresar tu direccion completa" );
-                        message.setText (  "Favor de ingresar tu direccion completa" );
-                        direccion = update.getMessage ().getText ();
+                }while (placa!=null);
 
-                    }
-                    if (command.equals ( "/eliminar" )){
-                        if (command.equals ( "/garage")){
-                            System.out.println ( "Favor de ingresar tu nombre de usuario  y zona ejemplo(napo-miraflores)" );
-                            message.setText ( "Favor de ingresar tu nombre de usuario  y zona ejemplo(napo-miraflores)" );
-                            aux = update.getMessage ().getText ();
-                            System.out.println ( aux );
-                        }
-                        if (command.equals ( "/auto" )){
-                            System.out.println ( "Favor de ingresar tu nombre de usuario  y placa ejemplo(napo-4231pfs)" );
-                            message.setText ( "Favor de ingresar tu nombre de usuario  y zona ejemplo(napo-4231pfs)" );
-                            aux = update.getMessage ().getText ();
-                            System.out.println ( aux );
-                        }
-                    }
-                }
-
-            }else {
-                System.out.println ( "email o pass incorrecto intente de nuevo" );
-                message.setText ( "email o pass incorrecto intente de nuevo" );
+                vehicleController.create(auto);
+                System.out.println ( "auto Creado" );
+                message.setText (  "auto creado" );
             }
+            else
+            {   System.out.println ( "hola "+idtelegram+" "+name+" "+lastname+secondlastname+" ya crramos tu auto"+placa);
+                message.setText (  "hola "+idtelegram+" "+name+" "+lastname+secondlastname+" ya crramos tu auto" );
+            }
+
+            if (command.equals ( "/regitra_garage" )){
+
+                ValGarage parqueo =new ValGarage (  );
+
+               // parqueo.setLat ( "123123" );
+                //parqueo.setLong1 ( "5584" );
+                do {
+                    System.out.println ( "favor ingrese el nombre del Parqueo" );
+                    message.setText ( "favor ingrese el nombre del Parqueo" );
+                    name=update.getMessage ().getText ();
+                    parqueo.setName ( update.getMessage ().getText () );
+
+                }while (placa!=null);
+                do {
+                    System.out.println ( "favor ingrese el nombre del Parqueo" );
+                    message.setText ( "favor ingrese el nombre del Parqueo" );
+
+                    parqueo.setTotalSpots ( espacios=Integer.parseInt (  update.getMessage ().getText () ));
+
+                }while (placa!=null);
+
+                garageController.create ( parqueo );
+                System.out.println ( "parqueo creado" );
+                message.setText (  "Parqueo creado" );
+            }
+            else
+            {   System.out.println ( "hola "+idtelegram+" "+name+" "+lastname+secondlastname+" ya crramos tu auto"+placa);
+                message.setText (  "hola "+idtelegram+" "+name+" "+lastname+secondlastname+" ya crramos tu auto" );}
+
+
+
+        }
+
         }
 
 
 
 
 
-        message.setChatId ( update.getMessage ().getChatId () );
-        try {
-            execute ( message );
-        } catch (TelegramApiException e) {
-            e.printStackTrace ();
-        }
-    }
+
     public String getBotUsername() {
         return "NeroBot";
     }
