@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface GarageRepository extends JpaRepository<ValGarage, Integer>  {
-List<ValGarage> findByTelegramId(int telegramId);
+List<ValGarage> findByGarageId(int garageId);
 }

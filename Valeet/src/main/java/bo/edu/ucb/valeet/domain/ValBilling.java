@@ -7,6 +7,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -38,8 +40,8 @@ public class ValBilling implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "billing_id")
     private Integer billingId;
     @Basic(optional = false)
@@ -74,9 +76,9 @@ public class ValBilling implements Serializable {
     @NotNull
     @Column(name = "payment_status")
     private int paymentStatus;
-    /*@JoinColumn(name = "booking_id", referencedColumnName = "booking_id")
+    @JoinColumn(name = "booking_id", referencedColumnName = "booking_id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private ValBooking bookingId;*/
+    private ValBooking bookingId;
 
     public ValBilling() {
     }
@@ -160,7 +162,6 @@ public class ValBilling implements Serializable {
         this.paymentStatus = paymentStatus;
     }
 
-    /*
     public ValBooking getBookingId() {
         return bookingId;
     }
@@ -168,7 +169,7 @@ public class ValBilling implements Serializable {
     public void setBookingId(ValBooking bookingId) {
         this.bookingId = bookingId;
     }
-*/
+
     @Override
     public int hashCode() {
         int hash = 0;

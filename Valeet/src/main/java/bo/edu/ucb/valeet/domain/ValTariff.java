@@ -2,21 +2,20 @@ package bo.edu.ucb.valeet.domain;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-
+/**
+ *
+ * @author ignacio
+ */
 @Entity
 @Table(name = "val_tariff")
 @NamedQueries({
@@ -47,8 +46,6 @@ public class ValTariff implements Serializable {
     @NotNull
     @Column(name = "status")
     private int status;
-    /*@OneToMany(cascade = CascadeType.ALL, mappedBy = "tariffId", fetch = FetchType.LAZY)
-    private Collection<ValBooking> valBookingCollection;*/
 
     public ValTariff() {
     }
@@ -95,15 +92,7 @@ public class ValTariff implements Serializable {
     public void setStatus(int status) {
         this.status = status;
     }
-/*
-    public Collection<ValBooking> getValBookingCollection() {
-        return valBookingCollection;
-    }
 
-    public void setValBookingCollection(Collection<ValBooking> valBookingCollection) {
-        this.valBookingCollection = valBookingCollection;
-    }
-*/
     @Override
     public int hashCode() {
         int hash = 0;

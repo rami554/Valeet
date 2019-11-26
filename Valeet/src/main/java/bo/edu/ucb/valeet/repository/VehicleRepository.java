@@ -6,5 +6,5 @@ import java.util.Optional;
 import java.util.List;
 
 public interface VehicleRepository extends JpaRepository<ValVehicle, Integer>  {
-    List<ValVehicle> findByTelegramId(int telegramId);
+    List<ValVehicle> findByVehicleId(int telegramId);
 }

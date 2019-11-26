@@ -6,5 +6,6 @@ import java.util.Optional;
 import java.util.List;
 
 public interface PersonRepository extends JpaRepository<ValPerson, Integer>  {
-List<ValPerson> findByTelegramId(int telegramId);
+ValPerson findByTelegramId(int telegramId);
+
 }

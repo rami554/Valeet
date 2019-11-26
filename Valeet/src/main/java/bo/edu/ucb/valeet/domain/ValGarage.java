@@ -1,12 +1,15 @@
 package bo.edu.ucb.valeet.domain;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -17,12 +20,19 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-
+/**
+ *
+ * @author ignacio
+ */
+@Entity
 @Table(name = "val_garage")
 @NamedQueries({
         @NamedQuery(name = "ValGarage.findAll", query = "SELECT v FROM ValGarage v"),
         @NamedQuery(name = "ValGarage.findByGarageId", query = "SELECT v FROM ValGarage v WHERE v.garageId = :garageId"),
         @NamedQuery(name = "ValGarage.findByName", query = "SELECT v FROM ValGarage v WHERE v.name = :name"),
+        @NamedQuery(name = "ValGarage.findByAddress", query = "SELECT v FROM ValGarage v WHERE v.address = :address"),
+        @NamedQuery(name = "ValGarage.findByZone", query = "SELECT v FROM ValGarage v WHERE v.zone = :zone"),
+        @NamedQuery(name = "ValGarage.findByRate", query = "SELECT v FROM ValGarage v WHERE v.rate = :rate"),
         @NamedQuery(name = "ValGarage.findByLat", query = "SELECT v FROM ValGarage v WHERE v.lat = :lat"),
         @NamedQuery(name = "ValGarage.findByLong1", query = "SELECT v FROM ValGarage v WHERE v.long1 = :long1"),
         @NamedQuery(name = "ValGarage.findByTotalSpots", query = "SELECT v FROM ValGarage v WHERE v.totalSpots = :totalSpots"),
@@ -33,8 +43,8 @@ public class ValGarage implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "garage_id")
     private Integer garageId;
     @Basic(optional = false)
@@ -42,6 +52,21 @@ public class ValGarage implements Serializable {
     @Size(min = 1, max = 50)
     @Column(name = "name")
     private String name;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 100)
+    @Column(name = "address")
+    private String address;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 50)
+    @Column(name = "zone")
+    private String zone;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "rate")
+    private BigDecimal rate;
     @Basic(optional = false)
     @NotNull
     @Column(name = "lat")
@@ -66,11 +91,11 @@ public class ValGarage implements Serializable {
     @NotNull
     @Column(name = "status")
     private int status;
-    /*@JoinColumn(name = "person_id", referencedColumnName = "person_id")
+    @JoinColumn(name = "person_id", referencedColumnName = "person_id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private ValPerson personId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "garageId", fetch = FetchType.LAZY)
-    private Collection<ValBooking> valBookingCollection;*/
+    private Collection<ValBooking> valBookingCollection;
 
     public ValGarage() {
     }
@@ -79,9 +104,12 @@ public class ValGarage implements Serializable {
         this.garageId = garageId;
     }
 
-    public ValGarage(Integer garageId, String name, double lat, double long1, int totalSpots, int freeSpots, int occupiedSpots, int status) {
+    public ValGarage(Integer garageId, String name, String address, String zone, BigDecimal rate, double lat, double long1, int totalSpots, int freeSpots, int occupiedSpots, int status) {
         this.garageId = garageId;
         this.name = name;
+        this.address = address;
+        this.zone = zone;
+        this.rate = rate;
         this.lat = lat;
         this.long1 = long1;
         this.totalSpots = totalSpots;
@@ -104,6 +132,30 @@ public class ValGarage implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getZone() {
+        return zone;
+    }
+
+    public void setZone(String zone) {
+        this.zone = zone;
+    }
+
+    public BigDecimal getRate() {
+        return rate;
+    }
+
+    public void setRate(BigDecimal rate) {
+        this.rate = rate;
     }
 
     public double getLat() {
@@ -153,7 +205,7 @@ public class ValGarage implements Serializable {
     public void setStatus(int status) {
         this.status = status;
     }
-/*
+
     public ValPerson getPersonId() {
         return personId;
     }
@@ -169,7 +221,7 @@ public class ValGarage implements Serializable {
     public void setValBookingCollection(Collection<ValBooking> valBookingCollection) {
         this.valBookingCollection = valBookingCollection;
     }
-*/
+
     @Override
     public int hashCode() {
         int hash = 0;

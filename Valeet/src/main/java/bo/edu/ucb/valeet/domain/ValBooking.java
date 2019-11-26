@@ -8,6 +8,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -19,7 +21,10 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
-
+/**
+ *
+ * @author ignacio
+ */
 @Entity
 @Table(name = "val_booking")
 @NamedQueries({
@@ -34,8 +39,8 @@ public class ValBooking implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "booking_id")
     private Integer bookingId;
     @Basic(optional = false)
@@ -62,17 +67,14 @@ public class ValBooking implements Serializable {
     @NotNull
     @Column(name = "total_time")
     private int totalTime;
-    /*@JoinColumn(name = "garage_id", referencedColumnName = "garage_id")
+    @JoinColumn(name = "garage_id", referencedColumnName = "garage_id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private ValGarage garageId;
-    @JoinColumn(name = "tariff_id", referencedColumnName = "tariff_id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private ValTariff tariffId;
     @JoinColumn(name = "vehicle_id", referencedColumnName = "vehicle_id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private ValVehicle vehicleId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingId", fetch = FetchType.LAZY)
-    private Collection<ValBilling> valBillingCollection;*/
+    private Collection<ValBilling> valBillingCollection;
 
     public ValBooking() {
     }
@@ -137,21 +139,13 @@ public class ValBooking implements Serializable {
     public void setTotalTime(int totalTime) {
         this.totalTime = totalTime;
     }
-/*
+
     public ValGarage getGarageId() {
         return garageId;
     }
 
     public void setGarageId(ValGarage garageId) {
         this.garageId = garageId;
-    }
-
-    public ValTariff getTariffId() {
-        return tariffId;
-    }
-
-    public void setTariffId(ValTariff tariffId) {
-        this.tariffId = tariffId;
     }
 
     public ValVehicle getVehicleId() {
@@ -169,7 +163,7 @@ public class ValBooking implements Serializable {
     public void setValBillingCollection(Collection<ValBilling> valBillingCollection) {
         this.valBillingCollection = valBillingCollection;
     }
-*/
+
     @Override
     public int hashCode() {
         int hash = 0;

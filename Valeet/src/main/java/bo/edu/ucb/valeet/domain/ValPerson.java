@@ -2,12 +2,25 @@ package bo.edu.ucb.valeet.domain;
 
 import java.io.Serializable;
 import java.util.Collection;
-import javax.persistence.*;
-import java.util.Optional;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-
+/**
+ *
+ * @author ignacio
+ */
 @Entity
 @Table(name = "val_person")
 @NamedQueries({
@@ -25,9 +38,8 @@ public class ValPerson implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    //@Basic(optional = false)
-    //@NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
     @Column(name = "person_id")
     private Integer personId;
     @Basic(optional = false)
@@ -52,22 +64,22 @@ public class ValPerson implements Serializable {
     @Column(name = "telegram_id")
     private int telegramId;
     @Basic(optional = false)
-    //@NotNull
+    @NotNull
     @Size(min = 1, max = 30)
     @Column(name = "personal_id")
     private String personalId;
     @Basic(optional = false)
-    //@NotNull
+    @NotNull
     @Column(name = "parking_admin")
     private int parkingAdmin;
     @Basic(optional = false)
     @NotNull
     @Column(name = "status")
     private int status;
-    /*@OneToMany(cascade = CascadeType.ALL, mappedBy = "personId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "personId", fetch = FetchType.LAZY)
     private Collection<ValGarage> valGarageCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "personId", fetch = FetchType.LAZY)
-    private Collection<ValVehicle> valVehicleCollection;*/
+    private Collection<ValVehicle> valVehicleCollection;
 
     public ValPerson() {
     }
@@ -157,7 +169,7 @@ public class ValPerson implements Serializable {
     public void setStatus(int status) {
         this.status = status;
     }
-/*
+
     public Collection<ValGarage> getValGarageCollection() {
         return valGarageCollection;
     }
@@ -173,7 +185,7 @@ public class ValPerson implements Serializable {
     public void setValVehicleCollection(Collection<ValVehicle> valVehicleCollection) {
         this.valVehicleCollection = valVehicleCollection;
     }
-*/
+
     @Override
     public int hashCode() {
         int hash = 0;

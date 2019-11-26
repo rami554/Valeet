@@ -1,164 +1,160 @@
 package bo.edu.ucb.valeet.Bot;
 
 
-import bo.edu.ucb.valeet.domain.ValGarage;
+import bo.edu.ucb.valeet.bl.BotBl;
+import bo.edu.ucb.valeet.bl.PersonBl;
+import bo.edu.ucb.valeet.bl.GarageBl;
+import bo.edu.ucb.valeet.bl.VehicleBl;
 import bo.edu.ucb.valeet.domain.ValPerson;
 import bo.edu.ucb.valeet.domain.ValVehicle;
-import bo.edu.ucb.valeet.controller.PersonController;
-import bo.edu.ucb.valeet.controller.GarageController;
-import bo.edu.ucb.valeet.controller.VehicleController;
-import bo.edu.ucb.valeet.repository.PersonRepository;
-import bo.edu.ucb.valeet.repository.GarageRepository;
-import bo.edu.ucb.valeet.repository.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RestController;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.User;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-
+import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
-@Component
+
 public class ValeetBot extends TelegramLongPollingBot {
 
-    @Autowired
-    PersonController personController;
-    VehicleController vehicleController;
-    GarageController garageController;
+    private BotBl botBl;
+    private PersonBl personBl;
+    private VehicleBl vehicleBl;
+    private GarageBl garageBl;
+
+    public ValeetBot(BotBl botBl, PersonBl personBl, VehicleBl vehicleBl, GarageBl garageBl){
+        this.botBl=botBl;
+        this.garageBl=garageBl;
+        this.personBl=personBl;
+        this.vehicleBl=vehicleBl;
+    }
 
     @Override
     public void onUpdateReceived(Update update) {
-        String aux;
-        int idtelegram;
+        if (update.hasMessage() && update.getMessage().hasText()) {
+            int conversation = botBl.processUpdate(update);
 
-        String usser;
-        String pass;
-        String email;
-        String placa=null;
-        String garage;
-        String nit;
-        String zona;
-        int espacios;
-        String direccion;
-        String name;
-        String lastname;
-        String secondlastname = null;
-        String personalid;
-
-        SendMessage message = new SendMessage ();
-       /* System.out.println(update.getMessage().getText());
-
-        message.setText(update.getMessage().getText());   */
-        String command = update.getMessage ().getText ();
-
-        if (command.equals ( "/start" )) {
-        name= update.getMessage ().getFrom ().getFirstName ();
-        lastname =update.getMessage ().getFrom ().getLastName ();
-        idtelegram = update.getMessage ().getFrom ().getId ();
-
-
-        if (personController.findByTelegramId(idtelegram).isEmpty())
-        {
-            ValPerson persona = new ValPerson();
-            persona.setTelegramId(idtelegram);
-            persona.setPersonId(1);
-            persona.setParkingAdmin(1);
-            persona.setStatus(1);
-            persona.setFirstName(name);
-            persona.setFirstLastName(lastname);
-            do {
-                    System.out.println ( "favor ingrese su  apellido materno" );
-                    message.setText ( "favor ingrese su  apellido materno" );
-                    secondlastname=update.getMessage ().getText ();
-                    persona.setSecondLastName ( update.getMessage ().getText () );
-            }while (secondlastname!=null);
-            do {
-                    System.out.println ( "favor ingrese su  apellido materno" );
-                    message.setText ( "favor ingrese su  apellido materno" );
-                    email=update.getMessage ().getText ();
-                    persona.setEmail(update.getMessage ().getText ());
-            }while (email!=null);
-            do {
-                    // Logger.info("Hello");
-                    System.out.println ( "favor ingrese su  apellido materno" );
-                    message.setText ( "favor ingrese su  apellido materno" );
-                    personalid=update.getMessage ().getText ();
-                    persona.setPersonalId ( update.getMessage ().getText () );
-            }while (personalid!=null);
-
-            personController.create(persona);
-            System.out.println ( "Usuario Creado" );
-            message.setText (  "Usuario creado" );
+            response(conversation, update);
         }
-        else
-        {   System.out.println ( "hola "+idtelegram+" "+name+" "+lastname+" como estas" );
-            message.setText (  "hola "+idtelegram+" "+name+" "+lastname+secondlastname+" como estas" );}
-           if (command.equals ( "/regitra_auto" )){
-
-                ValVehicle auto=new ValVehicle (  );
-
-                do {
-                    System.out.println ( "favor ingrese su placa" );
-                    message.setText ( "favor ingrese su placa" );
-                    placa=update.getMessage ().getText ();
-                    auto.setLicensePlate ( update.getMessage ().getText () );
-
-                }while (placa!=null);
-
-                vehicleController.create(auto);
-                System.out.println ( "auto Creado" );
-                message.setText (  "auto creado" );
-            }
-            else
-            {   System.out.println ( "hola "+idtelegram+" "+name+" "+lastname+secondlastname+" ya crramos tu auto"+placa);
-                message.setText (  "hola "+idtelegram+" "+name+" "+lastname+secondlastname+" ya crramos tu auto" );
-            }
-
-            if (command.equals ( "/regitra_garage" )){
-
-                ValGarage parqueo =new ValGarage (  );
-
-               // parqueo.setLat ( "123123" );
-                //parqueo.setLong1 ( "5584" );
-                do {
-                    System.out.println ( "favor ingrese el nombre del Parqueo" );
-                    message.setText ( "favor ingrese el nombre del Parqueo" );
-                    name=update.getMessage ().getText ();
-                    parqueo.setName ( update.getMessage ().getText () );
-
-                }while (placa!=null);
-                do {
-                    System.out.println ( "favor ingrese el nombre del Parqueo" );
-                    message.setText ( "favor ingrese el nombre del Parqueo" );
-
-                    parqueo.setTotalSpots ( espacios=Integer.parseInt (  update.getMessage ().getText () ));
-
-                }while (placa!=null);
-
-                garageController.create ( parqueo );
-                System.out.println ( "parqueo creado" );
-                message.setText (  "Parqueo creado" );
-            }
-            else
-            {   System.out.println ( "hola "+idtelegram+" "+name+" "+lastname+secondlastname+" ya crramos tu auto"+placa);
-                message.setText (  "hola "+idtelegram+" "+name+" "+lastname+secondlastname+" ya crramos tu auto" );}
-
-
-
+    }
+    public void response(int conversation, Update update){
+        List<String> responses = new ArrayList<>();
+        ReplyKeyboardMarkup rkm=null;
+        switch (conversation){
+            //****************************************\\
+            //Here is the initial registering\\
+            //****************************************\\
+            case 1:
+                responses.add("Bienvenido a Valeet!");
+                responses.add("Para comenzar necesitamos algunos datos personales");
+                responses.add("Ingresa tu segundo apellido (ingresa '-' si no lo tienes");
+                break;
+            case 2:
+                responses.add("Ingresa tu e-mail");
+                break;
+            case 3:
+                responses.add("Ingresa tu CI o pasaporte");
+                break;
+//Menu del usuario
+            case 4:
+                responses.add("¿Que deseas hacer a continuación?");
+                rkm= createReplyKeyboardMenu();
+                break;
+//Registro de Vehiculo
+            case 5:
+                responses.add("Registro de nuevo Vehiculo");
+                responses.add("Ingresa la placa de tu vehiculo (ejemplo 1020XKL");
+                break;
+            case 6:
+                responses.add("A continuacion se detallan tus vehiculos registrados");
+                ValPerson valPerson = personBl.findByTelegramId(update);
+                ValPerson persona = personBl.findByPersonId(valPerson.getPersonId());
+                List<ValVehicle> all = vehicleBl.all();
+                for(ValVehicle vehicle: all){
+                    if(vehicle.getPersonId().getPersonId() == persona.getPersonId()){
+                        responses.add(vehicle.toString());
+                    }
+                }
+                rkm= createOkMenu();
+                break;
+            case 7:
+                responses.add("Registro de Parqueo");
+                responses.add("Ingresa el nombre de tu parqueo");
+                break;
         }
+        for(String messageText: responses) {
+            SendMessage message = new SendMessage() // Create a SendMessage object with mandatory fields
+                    .setChatId(update.getMessage().getChatId())
+                    .setText(messageText);
+            if(rkm!=null){
+                message.setReplyMarkup(rkm);
+            }else{
+                ReplyKeyboardRemove keyboardMarkupRemove = new ReplyKeyboardRemove();
+                message.setReplyMarkup(keyboardMarkupRemove);
+            }
+            try {
+                this.execute(message);
 
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
         }
+    }
 
+    private ReplyKeyboardMarkup createOkMenu(){
+        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+        // Create the keyboard (list of keyboard rows)
+        List<KeyboardRow> keyboard = new ArrayList<>();
+        // Create a keyboard row
+        KeyboardRow row = new KeyboardRow();
+        // Set each button, you can also use KeyboardButton objects if you need something else than text
+        row.add("OK");
+        // Add the first row to the keyboard
+        keyboard.add(row);
+        // Create another keyboard row
+        // Set the keyboard to the markup
+        keyboardMarkup.setKeyboard(keyboard);
+        // Add it to the message
+        return keyboardMarkup;
 
-
-
-
+    }
+    private ReplyKeyboardMarkup createReplyKeyboardMenu() {
+        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+        List<KeyboardRow> keyboard = new ArrayList<>();
+        KeyboardRow row = new KeyboardRow();
+        row.add("Registrar Vehículo");
+        // Add the first row to the keyboard
+        keyboard.add(row);
+        row = new KeyboardRow();
+        row.add("Ver Vehículos");
+        keyboard.add(row);
+        // Create another keyboard row
+        row = new KeyboardRow();
+        // Set each button for the second line
+        row.add("Registrar Parqueo");
+        // Add the second row to the keyboard
+        keyboard.add(row);
+        row = new KeyboardRow();
+        // Set each button for the second line
+        row.add("Buscar Parqueo");
+        // Add the second row to the keyboard
+        keyboard.add(row);
+        row = new KeyboardRow();
+        // Set each button for the second line
+        row.add("Ver Mis Reservas");
+        // Add the second row to the keyboard
+        keyboard.add(row);
+        // Set the keyboard to the markup
+        keyboardMarkup.setKeyboard(keyboard);
+        // Add it to the message
+        return keyboardMarkup;
+    }
 
     public String getBotUsername() {
         return "NeroBot";

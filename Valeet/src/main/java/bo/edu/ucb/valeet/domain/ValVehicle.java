@@ -7,6 +7,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -32,8 +34,8 @@ public class ValVehicle implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "vehicle_id")
     private Integer vehicleId;
     @Basic(optional = false)
@@ -45,10 +47,10 @@ public class ValVehicle implements Serializable {
     @NotNull
     @Column(name = "status")
     private int status;
-    /*@OneToMany(cascade = CascadeType.ALL, mappedBy = "vehicleId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "vehicleId", fetch = FetchType.LAZY)
     private Collection<ValBooking> valBookingCollection;
     @JoinColumn(name = "person_id", referencedColumnName = "person_id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)*/
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private ValPerson personId;
 
     public ValVehicle() {
@@ -87,7 +89,7 @@ public class ValVehicle implements Serializable {
     public void setStatus(int status) {
         this.status = status;
     }
-/*
+
     public Collection<ValBooking> getValBookingCollection() {
         return valBookingCollection;
     }
@@ -95,7 +97,7 @@ public class ValVehicle implements Serializable {
     public void setValBookingCollection(Collection<ValBooking> valBookingCollection) {
         this.valBookingCollection = valBookingCollection;
     }
-*/
+
     public ValPerson getPersonId() {
         return personId;
     }

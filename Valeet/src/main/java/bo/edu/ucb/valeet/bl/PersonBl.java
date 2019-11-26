@@ -1,38 +1,36 @@
-package bo.edu.ucb.valeet.controller;
+package bo.edu.ucb.valeet.bl;
 
 import bo.edu.ucb.valeet.domain.ValPerson;
 import bo.edu.ucb.valeet.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.User;
 
 import java.util.List;
-import java.util.Optional;
 
-@Component
+@Service
 
-public class PersonController {
+public class PersonBl {
 
     PersonRepository repository;
     @Autowired
-    public PersonController(PersonRepository repository) {
+    public PersonBl(PersonRepository repository) {
 
         this.repository = repository;
     }
 
-    public PersonController() {
+    public PersonBl() {
 
     }
 
-    public List findByTelegramId(int id) {
+    public ValPerson findByTelegramId(Update update){
+        ValPerson valPerson = repository.findByTelegramId(update.getMessage().getFrom().getId());
+        return valPerson;
+    }
 
-    return repository.findByTelegramId(id);
-}
-
+    public ValPerson findByPersonId(Integer id){
+        return repository.findById(id).get();
+    }
     public ValPerson create(ValPerson person) {
 
         return repository.save(person);
