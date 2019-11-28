@@ -78,11 +78,12 @@ public class ValeetBot extends TelegramLongPollingBot {
                 List<ValVehicle> all = vehicleBl.all();
                 for(ValVehicle vehicle: all){
                     if(vehicle.getPersonId().getPersonId() == persona.getPersonId()){
-                        responses.add(vehicle.toString());
+                        responses.add("Vehiculo con placa: "+ vehicle.getLicensePlate());
                     }
                 }
                 rkm= createOkMenu();
                 break;
+ //Registro de parqueo
             case 7:
                 responses.add("Registro de Parqueo");
                 responses.add("Ingresa el nombre de tu parqueo");

@@ -32,7 +32,7 @@ import javax.validation.constraints.Size;
         @NamedQuery(name = "ValPerson.findByEmail", query = "SELECT v FROM ValPerson v WHERE v.email = :email"),
         @NamedQuery(name = "ValPerson.findByTelegramId", query = "SELECT v FROM ValPerson v WHERE v.telegramId = :telegramId"),
         @NamedQuery(name = "ValPerson.findByPersonalId", query = "SELECT v FROM ValPerson v WHERE v.personalId = :personalId"),
-        @NamedQuery(name = "ValPerson.findByParkingAdmin", query = "SELECT v FROM ValPerson v WHERE v.parkingAdmin = :parkingAdmin"),
+        @NamedQuery(name = "ValPerson.findByLastResponse", query = "SELECT v FROM ValPerson v WHERE v.lastResponse = :lastResponse"),
         @NamedQuery(name = "ValPerson.findByStatus", query = "SELECT v FROM ValPerson v WHERE v.status = :status")})
 public class ValPerson implements Serializable {
 
@@ -70,8 +70,8 @@ public class ValPerson implements Serializable {
     private String personalId;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "parking_admin")
-    private int parkingAdmin;
+    @Column(name = "last_response")
+    private int lastResponse;
     @Basic(optional = false)
     @NotNull
     @Column(name = "status")
@@ -88,13 +88,13 @@ public class ValPerson implements Serializable {
         this.personId = personId;
     }
 
-    public ValPerson(Integer personId, String firstName, String email, int telegramId, String personalId, int parkingAdmin, int status) {
+    public ValPerson(Integer personId, String firstName, String email, int telegramId, String personalId, int lastResponse, int status) {
         this.personId = personId;
         this.firstName = firstName;
         this.email = email;
         this.telegramId = telegramId;
         this.personalId = personalId;
-        this.parkingAdmin = parkingAdmin;
+        this.lastResponse = lastResponse;
         this.status = status;
     }
 
@@ -154,12 +154,12 @@ public class ValPerson implements Serializable {
         this.personalId = personalId;
     }
 
-    public int getParkingAdmin() {
-        return parkingAdmin;
+    public int getLastResponse() {
+        return lastResponse;
     }
 
-    public void setParkingAdmin(int parkingAdmin) {
-        this.parkingAdmin = parkingAdmin;
+    public void setLastResponse(int lastResponse) {
+        this.lastResponse = lastResponse;
     }
 
     public int getStatus() {

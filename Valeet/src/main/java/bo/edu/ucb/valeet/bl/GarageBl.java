@@ -14,24 +14,24 @@ import java.util.List;
 
 public class GarageBl {
 
-    GarageRepository repository1;
+    GarageRepository repository;
     @Autowired
-    public GarageBl(GarageRepository repository1) {
+    public GarageBl(GarageRepository repository) {
 
-        this.repository1 = repository1;
+        this.repository = repository;
     }
 
     public GarageBl() {
 
     }
 
-    public List findByGarageId (int id) {
+    public ValGarage findByGarageId (int id) {
 
-        return repository1.findByGarageId(id);
+        return repository.findByGarageId(id);
     }
 
     public ValGarage create(ValGarage garage) {
-        return repository1.save ( garage );
+        return repository.save ( garage );
     }
 
 }

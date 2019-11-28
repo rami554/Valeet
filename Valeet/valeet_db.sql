@@ -92,7 +92,7 @@ CREATE TABLE `val_person` (
   `email` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
   `telegram_id` int(30) NOT NULL,
   `personal_id` varchar(30) COLLATE utf8_spanish_ci NOT NULL,
-  `parking_admin` int(11) NOT NULL DEFAULT 1,
+  `last_response` int(11) NOT NULL DEFAULT 0,
   `status` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 

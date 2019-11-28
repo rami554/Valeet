@@ -9,7 +9,6 @@ import bo.edu.ucb.valeet.repository.GarageRepository;
 import bo.edu.ucb.valeet.repository.VehicleRepository;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,38 +43,37 @@ public class BotBl {
             Integer idPerson;
             ValVehicle newVehicle;
             ValGarage newGarage;
-            ValPerson newPerson;
             ValPerson valPerson = personRepository.findByTelegramId(update.getMessage().getFrom().getId());
-
-            switch (result){
+            int last_conversation = valPerson.getLastResponse();
+            switch (last_conversation){
 
                 case 1:
                     idPerson = valPerson.getPersonId();
                     LOGGER.info("Buscando el usuario{}: ",idPerson);
-                    newPerson = personRepository.findById(idPerson).get();
+                    valPerson = personRepository.findById(idPerson).get();
                     newSecondLastName = update.getMessage().getText();
-                        newPerson.setSecondLastName(newSecondLastName);
-                        personRepository.save(newPerson);
+                        valPerson.setSecondLastName(newSecondLastName);
+                        personRepository.save(valPerson);
                         result = 2;
                     break;
 
                 case 2:
                     idPerson = valPerson.getPersonId();
                     LOGGER.info("Buscando el usuario{}: ",idPerson);
-                    newPerson = personRepository.findById(idPerson).get();
+                    valPerson = personRepository.findById(idPerson).get();
                     newEmail = update.getMessage().getText();
-                        newPerson.setEmail(newEmail);
-                        personRepository.save(newPerson);
+                        valPerson.setEmail(newEmail);
+                        personRepository.save(valPerson);
                         result = 3;
                     break;
 
                 case 3:
                     idPerson = valPerson.getPersonId();
                     LOGGER.info("Buscando el usuario{}: ",idPerson);
-                    newPerson = personRepository.findById(idPerson).get();
+                    valPerson = personRepository.findById(idPerson).get();
                     newPersonalId = update.getMessage().getText();
-                    newPerson.setPersonalId(newPersonalId);
-                    personRepository.save(newPerson);
+                    valPerson.setPersonalId(newPersonalId);
+                    personRepository.save(valPerson);
                     result = 4;
                     break;
 
@@ -84,7 +82,7 @@ public class BotBl {
                 case 4:
                     idPerson = valPerson.getPersonId();
                     LOGGER.info("Buscando el usuario{}: ",idPerson);
-                    newPerson = personRepository.findById(idPerson).get();
+                    valPerson = personRepository.findById(idPerson).get();
                     result = 4;
 
                     if(update.getMessage().getText().equals("Registrar Vehículo")){
@@ -109,10 +107,10 @@ public class BotBl {
                 case 5:
                     idPerson = valPerson.getPersonId();
                     newVehicle = new ValVehicle();
-                    newPerson = personRepository.findById(idPerson).get();
+                    valPerson = personRepository.findById(idPerson).get();
                     LOGGER.info("Buscando el usuario {}",idPerson);
                     newLicensePlate = update.getMessage().getText();
-                        newVehicle.setPersonId(newPerson); //Falta el id?
+                        newVehicle.setPersonId(valPerson);
                         newVehicle.setLicensePlate(newLicensePlate);
                         newVehicle.setStatus(1);
                         vehicleRepository.save(newVehicle);
@@ -128,18 +126,19 @@ public class BotBl {
                 case 7:
                     idPerson = valPerson.getPersonId();
                     newGarage = new ValGarage();
-                    newPerson = personRepository.findById(idPerson).get();
+                    BigDecimal rate = new BigDecimal(0.00);
+                    valPerson = personRepository.findById(idPerson).get();
                     LOGGER.info("Buscando el usuario {}",idPerson);
                     newName = update.getMessage().getText();
-                    newGarage.setPersonId(newPerson);
+                    newGarage.setPersonId(valPerson);
                     newGarage.setName(newName);
                     newGarage.setAddress("NA");
                     newGarage.setTotalSpots(0);
                     newGarage.setFreeSpots(0);
                     newGarage.setOccupiedSpots(0);
-                    newGarage.setRate(new BigDecimal(0.0));
-                    newGarage.setLat(0.0);
-                    newGarage.setLong1(0.0);
+                    newGarage.setRate(rate);
+                    newGarage.setLat(1.0);
+                    newGarage.setLong1(1.0);
                     newGarage.setZone("NA");
                     newGarage.setStatus(1);
                     garageRepository.save(newGarage);
@@ -157,8 +156,8 @@ public class BotBl {
                     result = 9;
                     break;*/
                 }
-            //valPerson.setConversationId(result);
-            //cpUserRepository.save(valPerson);
+            valPerson.setLastResponse(result);
+            personRepository.save(valPerson);
         }
         return result;
     }
@@ -178,9 +177,9 @@ public class BotBl {
                 persona.setFirstLastName(user.getLastName());
             }
             persona.setStatus(Status.ACTIVE.getStatus());
-            persona.setPersonalId("NA");
-            persona.setEmail("NA");
-            persona.setParkingAdmin(1);
+            persona.setPersonalId("-");
+            persona.setEmail("-");
+            persona.setLastResponse(1);
             persona.setSecondLastName("-");
             persona.setTelegramId(user.getId());
             personRepository.save(persona);
