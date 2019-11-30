@@ -39,7 +39,10 @@ public class BotBl {
             result = 1;
         }
         else{
-            String newSecondLastName,newEmail,newPersonalId,newLicensePlate,newName,newAddress;
+            String newSecondLastName,newEmail,newPersonalId,newLicensePlate,newName,newAddress, newTotalSpots, newOccupiedSpots,
+            newRate, newZone;
+            double newLatitude, newLongitude;
+            List<ValGarage> allGarages;
             Integer idPerson;
             ValVehicle newVehicle;
             ValGarage newGarage;
@@ -138,23 +141,83 @@ public class BotBl {
                     newGarage.setOccupiedSpots(0);
                     newGarage.setRate(rate);
                     newGarage.setLat(1.0);
-                    newGarage.setLong1(1.0);
+                    newGarage.setLongitude(1.0);
                     newGarage.setZone("NA");
                     newGarage.setStatus(1);
                     garageRepository.save(newGarage);
-                        result = 4;
+                        result = 8;
                     break;
 
-   /*             case 8:
+                case 8:
                     idPerson = valPerson.getPersonId();
-                    newGarage = new ValGarage();
                     LOGGER.info("Buscando el usuario {}",idPerson);
                     newAddress = update.getMessage().getText();
-                    newGarage.setPersonId(valPerson);
+                    allGarages = garageRepository.findAll();
+                    newGarage = getLastGarage(allGarages, idPerson);
                     newGarage.setAddress(newAddress);
                     garageRepository.save(newGarage);
                     result = 9;
-                    break;*/
+                    break;
+
+                case 9:
+                    idPerson = valPerson.getPersonId();
+                    LOGGER.info("Buscando el usuario {}",idPerson);
+                    newTotalSpots = update.getMessage().getText();
+                    allGarages = garageRepository.findAll();
+                    newGarage = getLastGarage(allGarages, idPerson);
+                    newGarage.setTotalSpots(Integer.parseInt(newTotalSpots));
+                    garageRepository.save(newGarage);
+                    result = 10;
+                    break;
+
+                case 10:
+                    idPerson = valPerson.getPersonId();
+                    LOGGER.info("Buscando el usuario {}",idPerson);
+                    int freeSpots;
+                    newOccupiedSpots = update.getMessage().getText();
+                    allGarages = garageRepository.findAll();
+                    newGarage = getLastGarage(allGarages, idPerson);
+                    freeSpots = newGarage.getTotalSpots() - Integer.parseInt(newOccupiedSpots);
+                    newGarage.setTotalSpots(Integer.parseInt(newOccupiedSpots));
+                    newGarage.setFreeSpots(freeSpots);
+                    garageRepository.save(newGarage);
+                    result = 11;
+                    break;
+
+                case 11:
+                    idPerson = valPerson.getPersonId();
+                    LOGGER.info("Buscando el usuario {}",idPerson);
+                    newRate = update.getMessage().getText();
+                    allGarages = garageRepository.findAll();
+                    newGarage = getLastGarage(allGarages, idPerson);
+                    newGarage.setRate(new BigDecimal(newRate));
+                    garageRepository.save(newGarage);
+                    result = 12;
+                    break;
+
+                case 12:
+                    idPerson = valPerson.getPersonId();
+                    LOGGER.info("Buscando el usuario {}",idPerson);
+                    newLatitude = update.getMessage().getLocation().getLatitude();
+                    newLongitude = update.getMessage().getLocation().getLongitude();
+                    allGarages = garageRepository.findAll();
+                    newGarage = getLastGarage(allGarages, idPerson);
+                    newGarage.setLat(newLatitude);
+                    newGarage.setLongitude(newLongitude);
+                    garageRepository.save(newGarage);
+                    result = 13;
+                    break;
+
+                case 13:
+                    idPerson = valPerson.getPersonId();
+                    LOGGER.info("Buscando el usuario {}",idPerson);
+                    newZone = update.getMessage().getText();
+                    allGarages = garageRepository.findAll();
+                    newGarage = getLastGarage(allGarages, idPerson);
+                    newGarage.setZone(newZone);
+                    garageRepository.save(newGarage);
+                    result = 4;
+                    break;
                 }
             valPerson.setLastResponse(result);
             personRepository.save(valPerson);

@@ -34,7 +34,7 @@ import javax.validation.constraints.Size;
         @NamedQuery(name = "ValGarage.findByZone", query = "SELECT v FROM ValGarage v WHERE v.zone = :zone"),
         @NamedQuery(name = "ValGarage.findByRate", query = "SELECT v FROM ValGarage v WHERE v.rate = :rate"),
         @NamedQuery(name = "ValGarage.findByLat", query = "SELECT v FROM ValGarage v WHERE v.lat = :lat"),
-        @NamedQuery(name = "ValGarage.findByLong1", query = "SELECT v FROM ValGarage v WHERE v.long1 = :long1"),
+        @NamedQuery(name = "ValGarage.findByLongitude", query = "SELECT v FROM ValGarage v WHERE v.longitude = :longitude"),
         @NamedQuery(name = "ValGarage.findByTotalSpots", query = "SELECT v FROM ValGarage v WHERE v.totalSpots = :totalSpots"),
         @NamedQuery(name = "ValGarage.findByFreeSpots", query = "SELECT v FROM ValGarage v WHERE v.freeSpots = :freeSpots"),
         @NamedQuery(name = "ValGarage.findByOccupiedSpots", query = "SELECT v FROM ValGarage v WHERE v.occupiedSpots = :occupiedSpots"),
@@ -73,8 +73,8 @@ public class ValGarage implements Serializable {
     private double lat;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "long")
-    private double long1;
+    @Column(name = "longitude")
+    private double longitude;
     @Basic(optional = false)
     @NotNull
     @Column(name = "total_spots")
@@ -104,14 +104,14 @@ public class ValGarage implements Serializable {
         this.garageId = garageId;
     }
 
-    public ValGarage(Integer garageId, String name, String address, String zone, BigDecimal rate, double lat, double long1, int totalSpots, int freeSpots, int occupiedSpots, int status) {
+    public ValGarage(Integer garageId, String name, String address, String zone, BigDecimal rate, double lat, double longitude, int totalSpots, int freeSpots, int occupiedSpots, int status) {
         this.garageId = garageId;
         this.name = name;
         this.address = address;
         this.zone = zone;
         this.rate = rate;
         this.lat = lat;
-        this.long1 = long1;
+        this.longitude = longitude;
         this.totalSpots = totalSpots;
         this.freeSpots = freeSpots;
         this.occupiedSpots = occupiedSpots;
@@ -166,12 +166,12 @@ public class ValGarage implements Serializable {
         this.lat = lat;
     }
 
-    public double getLong1() {
-        return long1;
+    public double getLongitude() {
+        return longitude;
     }
 
-    public void setLong1(double long1) {
-        this.long1 = long1;
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     public int getTotalSpots() {

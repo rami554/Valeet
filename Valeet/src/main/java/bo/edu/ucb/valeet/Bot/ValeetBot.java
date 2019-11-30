@@ -14,6 +14,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -47,9 +48,9 @@ public class ValeetBot extends TelegramLongPollingBot {
         List<String> responses = new ArrayList<>();
         ReplyKeyboardMarkup rkm=null;
         switch (conversation){
-            //****************************************\\
-            //Here is the initial registering\\
-            //****************************************\\
+
+//Registro inicial
+
             case 1:
                 responses.add("Bienvenido a Valeet!");
                 responses.add("Para comenzar necesitamos algunos datos personales");
@@ -61,16 +62,23 @@ public class ValeetBot extends TelegramLongPollingBot {
             case 3:
                 responses.add("Ingresa tu CI o pasaporte");
                 break;
+
 //Menu del usuario
+
             case 4:
                 responses.add("¿Que deseas hacer a continuación?");
                 rkm= createReplyKeyboardMenu();
                 break;
+
 //Registro de Vehiculo
+
             case 5:
                 responses.add("Registro de nuevo Vehiculo");
                 responses.add("Ingresa la placa de tu vehiculo (ejemplo 1020XKL");
                 break;
+
+//Busqueda de Vehiculos
+
             case 6:
                 responses.add("A continuacion se detallan tus vehiculos registrados");
                 ValPerson valPerson = personBl.findByTelegramId(update);
@@ -83,10 +91,31 @@ public class ValeetBot extends TelegramLongPollingBot {
                 }
                 rkm= createOkMenu();
                 break;
+
  //Registro de parqueo
+
             case 7:
                 responses.add("Registro de Parqueo");
                 responses.add("Ingresa el nombre de tu parqueo");
+                break;
+            case 8:
+                responses.add("Ingresa la direccion de tu parqueo");
+                break;
+            case 9:
+                responses.add("Cuantos espacios en total tiene tu parqueo?");
+                break;
+            case 10:
+                responses.add("Cuantos espacios se encuentran ocupados en este momento?");
+                break;
+            case 11:
+                responses.add("Cual es la tarifa por hora? (Ej: 10.50)");
+                break;
+            case 12:
+                responses.add("Envia la ubicacion de tu garaje (debes encontrarte fisicamente en el lugar)");
+                rkm = sendLocation();
+                break;
+            case 13:
+                responses.add("En que zona se encuentra tu parqueo?");
                 break;
         }
         for(String messageText: responses) {
@@ -116,6 +145,27 @@ public class ValeetBot extends TelegramLongPollingBot {
         KeyboardRow row = new KeyboardRow();
         // Set each button, you can also use KeyboardButton objects if you need something else than text
         row.add("OK");
+        // Add the first row to the keyboard
+        keyboard.add(row);
+        // Create another keyboard row
+        // Set the keyboard to the markup
+        keyboardMarkup.setKeyboard(keyboard);
+        // Add it to the message
+        return keyboardMarkup;
+
+    }
+    private ReplyKeyboardMarkup sendLocation(){
+        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+        KeyboardButton keyboardButton = new KeyboardButton();
+        // Create the keyboard (list of keyboard rows)
+        List<KeyboardRow> keyboard = new ArrayList<>();
+
+        // Create a keyboard row
+        KeyboardRow row = new KeyboardRow();
+        // Set each button, you can also use KeyboardButton objects if you need something else than text
+        keyboardButton.setText("Enviar Ubicacion");
+        keyboardButton.setRequestLocation(true);
+        row.add(keyboardButton);
         // Add the first row to the keyboard
         keyboard.add(row);
         // Create another keyboard row

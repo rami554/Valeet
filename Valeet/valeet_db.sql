@@ -71,7 +71,7 @@ CREATE TABLE `val_garage` (
   `zone` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
   `rate` decimal(10,2) NOT NULL,
   `lat` double(10,6) NOT NULL,
-  `long` double(10,6) NOT NULL,
+  `longitude` double(10,6) NOT NULL,
   `total_spots` int(11) NOT NULL,
   `free_spots` int(11) NOT NULL,
   `occupied_spots` int(11) NOT NULL,
