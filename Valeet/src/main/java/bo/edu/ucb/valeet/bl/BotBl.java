@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.objects.Location;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 
@@ -197,18 +198,31 @@ public class BotBl {
 
                 case 12:
                     idPerson = valPerson.getPersonId();
+                    LOGGER.info("Buscando el usuario{}: ",idPerson);
+                    LOGGER.info("Ubicacion obtenida{}: ",idPerson);
+                    valPerson = personRepository.findById(idPerson).get();
+                    result = 12;
+
+                    if(update.getMessage().getText().equals("Enviar Ubicacion")){
+                        result = 13;
+                    }
+                    break;
+
+                case 13:
+                    idPerson = valPerson.getPersonId();
+                    Location location = new Location();
                     LOGGER.info("Buscando el usuario {}",idPerson);
-                    newLatitude = update.getMessage().getLocation().getLatitude();
-                    newLongitude = update.getMessage().getLocation().getLongitude();
+                    newLatitude = location.getLatitude();
+                    newLongitude = location.getLongitude();
                     allGarages = garageRepository.findAll();
                     newGarage = getLastGarage(allGarages, idPerson);
                     newGarage.setLat(newLatitude);
                     newGarage.setLongitude(newLongitude);
                     garageRepository.save(newGarage);
-                    result = 13;
+                    result = 14;
                     break;
 
-                case 13:
+                case 14:
                     idPerson = valPerson.getPersonId();
                     LOGGER.info("Buscando el usuario {}",idPerson);
                     newZone = update.getMessage().getText();

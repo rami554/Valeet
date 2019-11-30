@@ -47,6 +47,7 @@ public class ValeetBot extends TelegramLongPollingBot {
     public void response(int conversation, Update update){
         List<String> responses = new ArrayList<>();
         ReplyKeyboardMarkup rkm=null;
+        KeyboardButton kb=null;
         switch (conversation){
 
 //Registro inicial
@@ -114,7 +115,7 @@ public class ValeetBot extends TelegramLongPollingBot {
                 responses.add("Envia la ubicacion de tu garaje (debes encontrarte fisicamente en el lugar)");
                 rkm = sendLocation();
                 break;
-            case 13:
+            case 14:
                 responses.add("En que zona se encuentra tu parqueo?");
                 break;
         }
