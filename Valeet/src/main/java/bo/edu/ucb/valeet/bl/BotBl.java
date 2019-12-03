@@ -9,7 +9,11 @@ import bo.edu.ucb.valeet.repository.GarageRepository;
 import bo.edu.ucb.valeet.repository.VehicleRepository;
 
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
+
+import jdk.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +36,10 @@ public class BotBl {
         this.vehicleRepository= vehicleRepository;
     }
 
-    public int processUpdate(Update update){
+    public int processUpdate(Update update) throws MalformedURLException {
         LOGGER.info("RECIBIENDO UPDATE: {}",update);
+        String napo;
+        URL url=null;
         int result = 0;
         if(isNewUser(update)){
             LOGGER.info("Primer acceso de: {} ",update.getMessage().getFrom() );
@@ -141,8 +147,9 @@ public class BotBl {
                     newGarage.setFreeSpots(0);
                     newGarage.setOccupiedSpots(0);
                     newGarage.setRate(rate);
-                    newGarage.setLat(1.0);
-                    newGarage.setLongitude(1.0);
+
+                    newGarage.setLat(0.0);
+                    newGarage.setLongitude(0.0);
                     newGarage.setZone("NA");
                     newGarage.setStatus(1);
                     garageRepository.save(newGarage);
@@ -197,32 +204,30 @@ public class BotBl {
                     break;
 
                 case 12:
-                    idPerson = valPerson.getPersonId();
-                    LOGGER.info("Buscando el usuario{}: ",idPerson);
-                    LOGGER.info("Ubicacion obtenida{}: ",idPerson);
-                    valPerson = personRepository.findById(idPerson).get();
-                    result = 12;
+                    if (!update.getMessage ().hasLocation ())
+                    {
+                        result=12;
 
-                    if(update.getMessage().getText().equals("Enviar Ubicacion")){
+                    }
+                    else {
+                        idPerson = valPerson.getPersonId ();
+                        LOGGER.info ( "Buscando el usuario{}: ", idPerson );
+                        LOGGER.info ( "Ubicacion obtenida{}: ", idPerson );
+                        valPerson = personRepository.findById ( idPerson ).get ();
+                        allGarages = garageRepository.findAll ();
+                        newGarage = getLastGarage ( allGarages, idPerson );
+
+                        newGarage.setLat ( update.getMessage ().getLocation ().getLatitude () );
+                        newGarage.setLongitude ( update.getMessage ().getLocation ().getLongitude () );
+                        garageRepository.save ( newGarage );
                         result = 13;
+
                     }
                     break;
 
-                case 13:
-                    idPerson = valPerson.getPersonId();
-                    Location location = new Location();
-                    LOGGER.info("Buscando el usuario {}",idPerson);
-                    newLatitude = location.getLatitude();
-                    newLongitude = location.getLongitude();
-                    allGarages = garageRepository.findAll();
-                    newGarage = getLastGarage(allGarages, idPerson);
-                    newGarage.setLat(newLatitude);
-                    newGarage.setLongitude(newLongitude);
-                    garageRepository.save(newGarage);
-                    result = 14;
-                    break;
 
-                case 14:
+
+                case 13:
                     idPerson = valPerson.getPersonId();
                     LOGGER.info("Buscando el usuario {}",idPerson);
                     newZone = update.getMessage().getText();
@@ -232,9 +237,12 @@ public class BotBl {
                     garageRepository.save(newGarage);
                     result = 4;
                     break;
-                }
-            valPerson.setLastResponse(result);
-            personRepository.save(valPerson);
+                     }
+                    valPerson.setLastResponse(result);
+                    personRepository.save(valPerson);
+
+
+
         }
         return result;
     }

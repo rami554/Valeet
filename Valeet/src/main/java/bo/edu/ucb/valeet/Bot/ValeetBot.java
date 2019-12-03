@@ -1,6 +1,7 @@
 package bo.edu.ucb.valeet.Bot;
 
-
+import bo.edu.ucb.valeet.domain.ValGarage;
+import com.google.maps.*;
 import bo.edu.ucb.valeet.bl.BotBl;
 import bo.edu.ucb.valeet.bl.PersonBl;
 import bo.edu.ucb.valeet.bl.GarageBl;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
@@ -18,6 +20,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +31,10 @@ public class ValeetBot extends TelegramLongPollingBot {
     private PersonBl personBl;
     private VehicleBl vehicleBl;
     private GarageBl garageBl;
+    private int chatid;
+    private float latitud;
+    private float longitud;
+    private int reply_to_message_id;
 
     public ValeetBot(BotBl botBl, PersonBl personBl, VehicleBl vehicleBl, GarageBl garageBl){
         this.botBl=botBl;
@@ -38,14 +45,20 @@ public class ValeetBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        if (update.hasMessage() && update.getMessage().hasText()) {
-            int conversation = botBl.processUpdate(update);
+        if (update.hasMessage() && (update.getMessage().hasText() || update.getMessage ().hasLocation ())) {
+            int conversation = 0;
+            try {
+                conversation = botBl.processUpdate(update);
+            } catch (MalformedURLException e) {
+                e.printStackTrace ();
+            }
 
             response(conversation, update);
         }
     }
     public void response(int conversation, Update update){
         List<String> responses = new ArrayList<>();
+
         ReplyKeyboardMarkup rkm=null;
         KeyboardButton kb=null;
         switch (conversation){
@@ -113,11 +126,35 @@ public class ValeetBot extends TelegramLongPollingBot {
                 break;
             case 12:
                 responses.add("Envia la ubicacion de tu garaje (debes encontrarte fisicamente en el lugar)");
-                rkm = sendLocation();
+
+                rkm = sendLocation ( );
+
+
                 break;
-            case 14:
+            case 13:
                 responses.add("En que zona se encuentra tu parqueo?");
+                rkm= createOkMenu();
                 break;
+    //buscar parqueo
+            case 14:
+                responses.add ( "A continuacion se detallan tus vehiculos registrados" );
+                ValPerson valPerson1 = personBl.findByTelegramId ( update );
+                ValPerson persona1 = personBl.findByPersonId ( valPerson1.getPersonId () );
+                List<ValGarage> al = garageBl.all ();
+                for (ValGarage garage:al){
+                    if (garage.getPersonId ().getPersonId ()==persona1.getPersonId ())
+                    {
+                        responses.add("nombre de garage: "+ garage.getName ());
+                        responses.add("nombre de garage: "+ garage.getName ());
+                        responses.add("calle de garage: "+ garage.getAddress ());
+                        responses.add("zona de garage: "+ garage.getZone ());
+                        responses.add("latitud de garage: "+ garage.getLat ());
+                        responses.add("nombre de garage: "+ garage.getLongitude ());
+                    }
+                }
+                rkm= createOkMenu();
+               break;
+
         }
         for(String messageText: responses) {
             SendMessage message = new SendMessage() // Create a SendMessage object with mandatory fields
@@ -155,7 +192,11 @@ public class ValeetBot extends TelegramLongPollingBot {
         return keyboardMarkup;
 
     }
+
     private ReplyKeyboardMarkup sendLocation(){
+
+
+
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
         KeyboardButton keyboardButton = new KeyboardButton();
         // Create the keyboard (list of keyboard rows)
@@ -173,6 +214,8 @@ public class ValeetBot extends TelegramLongPollingBot {
         // Set the keyboard to the markup
         keyboardMarkup.setKeyboard(keyboard);
         // Add it to the message
+
+
         return keyboardMarkup;
 
     }
