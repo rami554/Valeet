@@ -1,7 +1,6 @@
 package bo.edu.ucb.valeet.Bot;
 
 import bo.edu.ucb.valeet.domain.ValGarage;
-import com.google.maps.*;
 import bo.edu.ucb.valeet.bl.BotBl;
 import bo.edu.ucb.valeet.bl.PersonBl;
 import bo.edu.ucb.valeet.bl.GarageBl;
@@ -68,7 +67,7 @@ public class ValeetBot extends TelegramLongPollingBot {
             case 1:
                 responses.add("Bienvenido a Valeet!");
                 responses.add("Para comenzar necesitamos algunos datos personales");
-                responses.add("Ingresa tu segundo apellido (ingresa '-' si no lo tienes");
+                responses.add("Ingresa tu segundo apellido (ingresa 'NA' si no lo tienes");
                 break;
             case 2:
                 responses.add("Ingresa tu e-mail");
@@ -133,7 +132,6 @@ public class ValeetBot extends TelegramLongPollingBot {
                 break;
             case 13:
                 responses.add("En que zona se encuentra tu parqueo?");
-                rkm= createOkMenu();
                 break;
     //buscar parqueo
             case 14:
@@ -154,6 +152,34 @@ public class ValeetBot extends TelegramLongPollingBot {
                 }
                 rkm= createOkMenu();
                break;
+
+            case 30:
+                responses.add("Unicamente puedes ingresar letras");
+                responses.add("Ingresa tu segundo apellido (ingresa 'NA' si no lo tienes");
+                break;
+            case 31:
+                responses.add("Debes ingresar una direccion de e-mail valida");
+                responses.add("Ingresa tu e-mail");
+                break;
+            case 32:
+                responses.add("Unicamente puedes ingresar numeros y/o letras");
+                responses.add("Ingresa tu CI o pasaporte");
+            case 33:
+                responses.add("Unicamente puedes ingresar numeros y/o letras");
+                responses.add("Ingresa la placa de tu vehiculo (ejemplo 1020XKL)");
+                break;
+            case 34:
+                responses.add("Unicamente puedes ingresar numeros");
+                responses.add("Cuantos espacios en total tiene tu parqueo?");
+                break;
+            case 35:
+                responses.add("Unicamente puedes ingresar numeros");
+                responses.add("Cuantos espacios se encuentran ocupados en este momento?");
+                break;
+            case 36:
+                responses.add("Unicamente puedes ingresar numeros");
+                responses.add("Cual es la tarifa por hora? (Ej: 10.50)");
+                break;
 
         }
         for(String messageText: responses) {
