@@ -12,7 +12,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import javax.annotation.PostConstruct;
 
-@Component
+@Component napo
 public class BotInitializer {
 
     BotBl botBl;
