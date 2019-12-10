@@ -1,12 +1,8 @@
 package bo.edu.ucb.valeet.bl;
 
 import bo.edu.ucb.valeet.domain.ValGarage;
-
-import bo.edu.ucb.valeet.domain.ValVehicle;
 import bo.edu.ucb.valeet.repository.GarageRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

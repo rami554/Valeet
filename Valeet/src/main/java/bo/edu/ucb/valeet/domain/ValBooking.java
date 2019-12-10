@@ -1,6 +1,7 @@
 package bo.edu.ucb.valeet.domain;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -34,7 +35,8 @@ import javax.validation.constraints.NotNull;
         @NamedQuery(name = "ValBooking.findByEndDate", query = "SELECT v FROM ValBooking v WHERE v.endDate = :endDate"),
         @NamedQuery(name = "ValBooking.findByStartTime", query = "SELECT v FROM ValBooking v WHERE v.startTime = :startTime"),
         @NamedQuery(name = "ValBooking.findByEndTime", query = "SELECT v FROM ValBooking v WHERE v.endTime = :endTime"),
-        @NamedQuery(name = "ValBooking.findByTotalTime", query = "SELECT v FROM ValBooking v WHERE v.totalTime = :totalTime")})
+        @NamedQuery(name = "ValBooking.findByTotalTime", query = "SELECT v FROM ValBooking v WHERE v.totalTime = :totalTime"),
+        @NamedQuery(name = "ValBooking.findByPenalty", query = "SELECT v FROM ValBooking v WHERE v.penalty = :penalty")})
 public class ValBooking implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -67,6 +69,14 @@ public class ValBooking implements Serializable {
     @NotNull
     @Column(name = "total_time")
     private int totalTime;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "penalty")
+    private BigDecimal penalty;
+    @JoinColumn(name = "idval_booking_status", referencedColumnName = "idval_booking_status")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private ValBookingStatus idvalBookingStatus;
     @JoinColumn(name = "garage_id", referencedColumnName = "garage_id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private ValGarage garageId;
@@ -83,13 +93,14 @@ public class ValBooking implements Serializable {
         this.bookingId = bookingId;
     }
 
-    public ValBooking(Integer bookingId, Date startDate, Date endDate, Date startTime, Date endTime, int totalTime) {
+    public ValBooking(Integer bookingId, Date startDate, Date endDate, Date startTime, Date endTime, int totalTime, BigDecimal penalty) {
         this.bookingId = bookingId;
         this.startDate = startDate;
         this.endDate = endDate;
         this.startTime = startTime;
         this.endTime = endTime;
         this.totalTime = totalTime;
+        this.penalty = penalty;
     }
 
     public Integer getBookingId() {
@@ -140,6 +151,22 @@ public class ValBooking implements Serializable {
         this.totalTime = totalTime;
     }
 
+    public BigDecimal getPenalty() {
+        return penalty;
+    }
+
+    public void setPenalty(BigDecimal penalty) {
+        this.penalty = penalty;
+    }
+
+    public ValBookingStatus getIdvalBookingStatus() {
+        return idvalBookingStatus;
+    }
+
+    public void setIdvalBookingStatus(ValBookingStatus idvalBookingStatus) {
+        this.idvalBookingStatus = idvalBookingStatus;
+    }
+
     public ValGarage getGarageId() {
         return garageId;
     }
@@ -183,6 +210,7 @@ public class ValBooking implements Serializable {
         }
         return true;
     }
+
 
     @Override
     public String toString() {
