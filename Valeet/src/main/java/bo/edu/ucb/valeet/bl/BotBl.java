@@ -48,7 +48,6 @@ public class BotBl {
         else{
             String newSecondLastName,newEmail,newPersonalId,newLicensePlate,newName,newAddress, newTotalSpots, newOccupiedSpots,
             newRate, newZone;
-            double newLatitude, newLongitude;
             List<ValGarage> allGarages;
             Integer idPerson;
             ValVehicle newVehicle;
