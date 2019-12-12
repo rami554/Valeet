@@ -80,7 +80,8 @@ public class ValPerson implements Serializable {
     private Collection<ValGarage> valGarageCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "personId", fetch = FetchType.LAZY)
     private Collection<ValVehicle> valVehicleCollection;
-
+    private  double latitud;
+    private  double longitud;
     public ValPerson() {
     }
 
@@ -88,7 +89,7 @@ public class ValPerson implements Serializable {
         this.personId = personId;
     }
 
-    public ValPerson(Integer personId, String firstName, String email, int telegramId, String personalId, int lastResponse, int status) {
+    public ValPerson(Integer personId, String firstName, String email, int telegramId, String personalId, int lastResponse, int status,double latitud,double longitud) {
         this.personId = personId;
         this.firstName = firstName;
         this.email = email;
@@ -96,6 +97,8 @@ public class ValPerson implements Serializable {
         this.personalId = personalId;
         this.lastResponse = lastResponse;
         this.status = status;
+        this.latitud= latitud;
+        this.longitud=longitud;
     }
 
     public Integer getPersonId() {

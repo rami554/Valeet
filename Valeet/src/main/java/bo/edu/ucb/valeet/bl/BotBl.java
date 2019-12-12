@@ -1,5 +1,6 @@
 package bo.edu.ucb.valeet.bl;
 
+import bo.edu.ucb.valeet.domain.ValBooking;
 import bo.edu.ucb.valeet.dto.Status;
 import bo.edu.ucb.valeet.domain.ValPerson;
 import bo.edu.ucb.valeet.domain.ValGarage;
@@ -52,6 +53,7 @@ public class BotBl {
             Integer idPerson;
             ValVehicle newVehicle;
             ValGarage newGarage;
+            ValBooking newBooking = null;
             Boolean checker;
             ValPerson valPerson = personRepository.findByTelegramId(update.getMessage().getFrom().getId());
             int last_conversation = valPerson.getLastResponse();
@@ -283,6 +285,37 @@ public class BotBl {
                     garageRepository.save(newGarage);
                     result = 4;
                     break;
+// Buscar parqueo
+                case 14:
+                    result=15;
+                    break;
+                case 15:
+                    if (!update.getMessage ().hasLocation ())
+                    {
+                        result=15;
+
+                    }
+                    else {
+                        idPerson = valPerson.getPersonId ();
+                        LOGGER.info ( "Buscando el usuario{}: ", idPerson );
+                        LOGGER.info ( "Ubicacion obtenida{}: ", idPerson );
+                        valPerson = personRepository.findById ( idPerson ).get ();
+
+                        newBooking.setLat ( update.getMessage ().getLocation ().getLatitude () );
+                        newBooking.setLongitude ( update.getMessage ().getLocation ().getLongitude () );
+                    }
+                    result=16;
+                    break;
+                    // calacular los parqueos en el radio deseado
+                case 16:
+                    String radio ;
+                    radio = update.getMessage().getText();
+                    double ratio = Double.parseDouble(radio);
+
+
+
+
+
 
 //Mensajes de error
 

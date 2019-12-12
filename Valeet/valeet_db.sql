@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 10-12-2019 a las 01:49:41
+-- Tiempo de generación: 03-11-2019 a las 14:32:14
 -- Versión del servidor: 10.4.6-MariaDB
 -- Versión de PHP: 7.3.8
 
@@ -36,7 +36,8 @@ CREATE TABLE `val_billing` (
   `total_due` decimal(10,2) NOT NULL,
   `auth_number` bigint(20) NOT NULL,
   `control_number` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
-  `billing_date` date NOT NULL
+  `billing_date` date NOT NULL,
+  `payment_status` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
@@ -49,13 +50,11 @@ CREATE TABLE `val_booking` (
   `booking_id` int(11) NOT NULL,
   `vehicle_id` int(11) NOT NULL,
   `garage_id` int(11) NOT NULL,
-  `idval_booking_status` int(11) NOT NULL,
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
   `start_time` time NOT NULL,
   `end_time` time NOT NULL,
-  `total_time` int(11) NOT NULL,
-  `penalty` decimal(10,2) NOT NULL DEFAULT 0.00
+  `total_time` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
@@ -79,13 +78,6 @@ CREATE TABLE `val_garage` (
   `status` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
---
--- Volcado de datos para la tabla `val_garage`
---
-
-INSERT INTO `val_garage` (`garage_id`, `person_id`, `name`, `address`, `zone`, `rate`, `lat`, `longitude`, `total_spots`, `free_spots`, `occupied_spots`, `status`) VALUES
-(5, 17, 'Jajajaj', 'Paraguay', 'Miraflores', '3.00', -16.496443, -68.118973, 2, 88, 0, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -98,20 +90,11 @@ CREATE TABLE `val_person` (
   `first_last_name` varchar(50) COLLATE utf8_spanish_ci DEFAULT NULL,
   `second_last_name` varchar(50) COLLATE utf8_spanish_ci DEFAULT NULL,
   `email` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
-  `telegram_id` int(50) NOT NULL,
+  `telegram_id` int(30) NOT NULL,
   `personal_id` varchar(30) COLLATE utf8_spanish_ci NOT NULL,
   `last_response` int(11) NOT NULL DEFAULT 0,
   `status` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-
---
--- Volcado de datos para la tabla `val_person`
---
-
-INSERT INTO `val_person` (`person_id`, `first_name`, `first_last_name`, `second_last_name`, `email`, `telegram_id`, `personal_id`, `last_response`, `status`) VALUES
-(12, 'Ignacio', 'Salgado', 'Faller', 'abcd@gmail.com', 822667963, '4845044LP', 12, 1),
-(14, 'Emmanuel', 'Villanueva', 'Villanueva', '-', 928868420, '-', 2, 1),
-(17, 'Napoleón', 'Cuba', 'Jsjs', 'napocuba@gmail.com', 726115839, 'Kdkd', 88, 1);
 
 -- --------------------------------------------------------
 
@@ -125,16 +108,6 @@ CREATE TABLE `val_vehicle` (
   `license_plate` varchar(10) COLLATE utf8_spanish_ci NOT NULL,
   `status` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-
---
--- Volcado de datos para la tabla `val_vehicle`
---
-
-INSERT INTO `val_vehicle` (`vehicle_id`, `person_id`, `license_plate`, `status`) VALUES
-(3, 12, '7854LPO', 1),
-(4, 12, 'lol11', 1),
-(5, 17, 'Jsjsk22', 1),
-(6, 17, 'Kekke22', 1);
 
 --
 -- Índices para tablas volcadas
@@ -153,8 +126,7 @@ ALTER TABLE `val_billing`
 ALTER TABLE `val_booking`
   ADD PRIMARY KEY (`booking_id`),
   ADD KEY `val_booking_val_garage` (`garage_id`),
-  ADD KEY `val_booking_val_vehicle` (`vehicle_id`),
-  ADD KEY `fk_idval_booking_status` (`idval_booking_status`);
+  ADD KEY `val_booking_val_vehicle` (`vehicle_id`);
 
 --
 -- Indices de la tabla `val_garage`
@@ -196,19 +168,20 @@ ALTER TABLE `val_booking`
 -- AUTO_INCREMENT de la tabla `val_garage`
 --
 ALTER TABLE `val_garage`
-  MODIFY `garage_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `garage_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `val_person`
 --
 ALTER TABLE `val_person`
-  MODIFY `person_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `person_id` int(11) NOT NULL AUTO_INCREMENT;
+
 
 --
 -- AUTO_INCREMENT de la tabla `val_vehicle`
 --
 ALTER TABLE `val_vehicle`
-  MODIFY `vehicle_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `vehicle_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Restricciones para tablas volcadas
@@ -224,7 +197,6 @@ ALTER TABLE `val_billing`
 -- Filtros para la tabla `val_booking`
 --
 ALTER TABLE `val_booking`
-  ADD CONSTRAINT `fk_idval_booking_status` FOREIGN KEY (`idval_booking_status`) REFERENCES `val_booking_status` (`idval_booking_status`),
   ADD CONSTRAINT `val_booking_val_garage` FOREIGN KEY (`garage_id`) REFERENCES `val_garage` (`garage_id`),
   ADD CONSTRAINT `val_booking_val_vehicle` FOREIGN KEY (`vehicle_id`) REFERENCES `val_vehicle` (`vehicle_id`);
 

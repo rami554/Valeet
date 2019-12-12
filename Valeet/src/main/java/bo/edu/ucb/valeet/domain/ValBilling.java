@@ -34,7 +34,8 @@ import javax.validation.constraints.Size;
         @NamedQuery(name = "ValBilling.findByTotalDue", query = "SELECT v FROM ValBilling v WHERE v.totalDue = :totalDue"),
         @NamedQuery(name = "ValBilling.findByAuthNumber", query = "SELECT v FROM ValBilling v WHERE v.authNumber = :authNumber"),
         @NamedQuery(name = "ValBilling.findByControlNumber", query = "SELECT v FROM ValBilling v WHERE v.controlNumber = :controlNumber"),
-        @NamedQuery(name = "ValBilling.findByBillingDate", query = "SELECT v FROM ValBilling v WHERE v.billingDate = :billingDate")})
+        @NamedQuery(name = "ValBilling.findByBillingDate", query = "SELECT v FROM ValBilling v WHERE v.billingDate = :billingDate"),
+        @NamedQuery(name = "ValBilling.findByPaymentStatus", query = "SELECT v FROM ValBilling v WHERE v.paymentStatus = :paymentStatus")})
 public class ValBilling implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -71,6 +72,10 @@ public class ValBilling implements Serializable {
     @Column(name = "billing_date")
     @Temporal(TemporalType.DATE)
     private Date billingDate;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "payment_status")
+    private int paymentStatus;
     @JoinColumn(name = "booking_id", referencedColumnName = "booking_id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private ValBooking bookingId;
@@ -82,7 +87,7 @@ public class ValBilling implements Serializable {
         this.billingId = billingId;
     }
 
-    public ValBilling(Integer billingId, String name, long nit, BigDecimal totalDue, long authNumber, String controlNumber, Date billingDate) {
+    public ValBilling(Integer billingId, String name, long nit, BigDecimal totalDue, long authNumber, String controlNumber, Date billingDate, int paymentStatus) {
         this.billingId = billingId;
         this.name = name;
         this.nit = nit;
@@ -90,6 +95,7 @@ public class ValBilling implements Serializable {
         this.authNumber = authNumber;
         this.controlNumber = controlNumber;
         this.billingDate = billingDate;
+        this.paymentStatus = paymentStatus;
     }
 
     public Integer getBillingId() {
@@ -146,6 +152,14 @@ public class ValBilling implements Serializable {
 
     public void setBillingDate(Date billingDate) {
         this.billingDate = billingDate;
+    }
+
+    public int getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(int paymentStatus) {
+        this.paymentStatus = paymentStatus;
     }
 
     public ValBooking getBookingId() {

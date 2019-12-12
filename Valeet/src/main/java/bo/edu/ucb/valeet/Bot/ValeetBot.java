@@ -135,23 +135,37 @@ public class ValeetBot extends TelegramLongPollingBot {
                 break;
     //buscar parqueo
             case 14:
-                responses.add ( "A continuacion se detallan tus vehiculos registrados" );
-                ValPerson valPerson1 = personBl.findByTelegramId ( update );
-                ValPerson persona1 = personBl.findByPersonId ( valPerson1.getPersonId () );
-                List<ValGarage> al = garageBl.all ();
-                for (ValGarage garage:al){
-                    if (garage.getPersonId ().getPersonId ()==persona1.getPersonId ())
-                    {
-                        responses.add("nombre de garage: "+ garage.getName ());
-                        responses.add("nombre de garage: "+ garage.getName ());
-                        responses.add("calle de garage: "+ garage.getAddress ());
-                        responses.add("zona de garage: "+ garage.getZone ());
-                        responses.add("latitud de garage: "+ garage.getLat ());
-                        responses.add("nombre de garage: "+ garage.getLongitude ());
+                responses.add ( "ver parqueos" );
+                responses.add ( "que auto usaras?" );
+                ValPerson valPersons = personBl.findByTelegramId(update);
+                ValPerson personas = personBl.findByPersonId(valPersons.getPersonId());
+
+                List<ValVehicle> all1 = vehicleBl.all();
+                for(ValVehicle vehicle: all1){
+                    if(vehicle.getPersonId().getPersonId() == personas.getPersonId()){
+                        responses.add("Vehiculo con placa: "+ vehicle.getLicensePlate());
                     }
                 }
-                rkm= createOkMenu();
-               break;
+
+                break;
+            case 15:
+                responses.add("Envia tu ubicacion ");
+
+                rkm = sendLocation ( );
+                break;
+            case 16:
+                responses.add ( "a que redio deseas buscar" );
+                Double caculoradio=0.0;
+                List<ValGarage> todo = garageBl.all ();
+                for(ValGarage garage: todo){
+                    caculoradio=
+//............................................
+                    if(caculoradio>){
+                        responses.add("Vehiculo con placa: "+ vehicle.getLicensePlate());
+                    }
+                }
+
+
 
             case 30:
                 responses.add("Unicamente puedes ingresar letras");

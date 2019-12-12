@@ -162,8 +162,9 @@ public class ValGarage implements Serializable {
         return lat;
     }
 
-    public void setLat(double lat) {
+    public double setLat(double lat) {
         this.lat = lat;
+        return lat;
     }
 
     public double getLongitude() {
